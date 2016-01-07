@@ -28,7 +28,7 @@ This will install:
 
 Add the following property to mqweb.properties:
 
-mq.web.app=<mqwebapp-path>
+mq.web.app=*mqwebapp-path*
 
 > Note that this will only work with MQWeb version 0.1.0 (currently in [development](https://github.com/fbraem/mqweb)) and above.
 
