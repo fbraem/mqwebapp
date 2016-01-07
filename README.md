@@ -3,6 +3,8 @@ MQWeb App will be the official web application for [MQWeb](http://www.mqweb.org)
 
 > This project is still in experimental mode ...
 
+![full screen mode](https://raw.github.com/fbraem/mqwebapp/screenshots/screenshots/mqwebapp_preview_1.png)
+
 # Install
 
 ## Download
@@ -29,4 +31,5 @@ Add the following property to mqweb.properties:
 mq.web.app=<mqwebapp-path>
 
 > Note that this will only work with MQWeb version 0.1.0 (currently in [development](https://github.com/fbraem/mqweb)) and above.
+
 
