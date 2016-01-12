@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title>MQWeb App</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
 		<link rel="stylesheet" href="bower_components/uikit/css/uikit.gradient.min.css" />
 		<script src="bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
 		<script src="bower_components/uikit/js/uikit.min.js" type="text/javascript"></script>
@@ -12,6 +13,7 @@
 		<script src="bower_components/es6-promise/promise.min.js" type="text/javascript"></script>
 		<script src="bower_components/fetch/fetch.js" type="text/javascript"></script>
 		<script src="bower_components/lockr/lockr.min.js" type="text/javascript"></script>
+		<script src="bower_components/moment/min/moment-with-locales.min.js" type="text/javascript"></script>
 		<style>
 	 	.loader {
 			background-image: url(data:image/gif;base64,R0lGODlhEAALAPQAAP///0pISOTk5N3d3e/v705MTEpISGpoaKalpY6MjM3NzWJgYH59fauqqpCPj9DQ0GRjY0xKSoF/f+zs7OPi4vb29nFwcOXl5fX19crKyru6utnY2PLy8gAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCwAAACwAAAAAEAALAAAFLSAgjmRpnqSgCuLKAq5AEIM4zDVw03ve27ifDgfkEYe04kDIDC5zrtYKRa2WQgAh+QQJCwAAACwAAAAAEAALAAAFJGBhGAVgnqhpHIeRvsDawqns0qeN5+y967tYLyicBYE7EYkYAgAh+QQJCwAAACwAAAAAEAALAAAFNiAgjothLOOIJAkiGgxjpGKiKMkbz7SN6zIawJcDwIK9W/HISxGBzdHTuBNOmcJVCyoUlk7CEAAh+QQJCwAAACwAAAAAEAALAAAFNSAgjqQIRRFUAo3jNGIkSdHqPI8Tz3V55zuaDacDyIQ+YrBH+hWPzJFzOQQaeavWi7oqnVIhACH5BAkLAAAALAAAAAAQAAsAAAUyICCOZGme1rJY5kRRk7hI0mJSVUXJtF3iOl7tltsBZsNfUegjAY3I5sgFY55KqdX1GgIAIfkECQsAAAAsAAAAABAACwAABTcgII5kaZ4kcV2EqLJipmnZhWGXaOOitm2aXQ4g7P2Ct2ER4AMul00kj5g0Al8tADY2y6C+4FIIACH5BAkLAAAALAAAAAAQAAsAAAUvICCOZGme5ERRk6iy7qpyHCVStA3gNa/7txxwlwv2isSacYUc+l4tADQGQ1mvpBAAIfkECQsAAAAsAAAAABAACwAABS8gII5kaZ7kRFGTqLLuqnIcJVK0DeA1r/u3HHCXC/aKxJpxhRz6Xi0ANAZDWa+kEAA7AAAAAAAAAAAA);
@@ -30,19 +32,22 @@
 						<a href="https://github.com/fbraem/mqwebapp"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 					</div>
 					<nav class="uk-navbar">
+						<a href="#" class="uk-navbar-toggle"></a>
 						<a href="#" class="uk-navbar-brand">MQWeb</a>
 						<ul class="uk-navbar-nav">
 						</ul>
 						<div class="uk-navbar-content">
-							<div id="queueManagerAutoComplete" class="uk-autocomplete uk-form" data-uk-autocomplete="" >
-								<input type="text" v-model="search" placeholder="Queuemanager" />
-								<button v-on:click.prevent="add" v-bind:disabled="queueManager.length == 0" class="uk-button uk-button-primary">Add</button>
-							</div>
+							<form class="uk-form uk-margin-remove uk-display-inline-block">
+								<div id="queueManagerAutoComplete" class="uk-autocomplete" data-uk-autocomplete="" >
+									<input type="text" v-model="search" placeholder="Queuemanager" />
+									<button v-on:click.prevent="add" v-bind:disabled="queueManager.length == 0" class="uk-button uk-button-primary">Add</button>
+								</div>
+							</form>
 						</div>
 					</nav>
 				</div>
 	 		</div>
-			<div v-if="queueManagers.length == 0" class="uk-grid" data-uk-grid-margin="">
+			<div v-if="noQmgrs" class="uk-grid" data-uk-grid-margin="">
 				<div class="uk-width-1-1">
 					<p>
 						Please add some queuemanagers to this page using the entryfield in the navigation bar.
@@ -55,37 +60,29 @@
 				</div>
 			</div>
 	 		<div class="uk-grid" data-uk-grid-margin="">
-	 			<div class="uk-width-medium-1-3 uk-row-first">
-	 				<div class="uk-panel uk-panel-box">
-						<a href="#" style="float:right;" class="uk-close"></a>
-	 					<h3 class="uk-panel-title">PIGEON<span style="float:right;margin-right:10px;margin-top:2px" class="uk-badge uk-badge-success">Ok</span></h3>
-	 					<hr />
-	 					<blockquote>
-	 						Test queuemanager for MQWeb
-	 					</blockquote>
-						<p class="uk-alert">Checking connection ... <span class="loader">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
-	 				</div>
-	 			</div>
-	 			<div class="uk-width-medium-1-3">
-	 				<div class="uk-panel uk-panel-box">
-						<a href="#" style="float:right;" class="uk-close"></a>
-	 					<h3 class="uk-panel-title">BLACKBIRD<span style="float:right;margin-right:10px;margin-top:2px" class="uk-badge uk-badge-danger">Error</span></h3>
-	 					<hr />
-	 					<p>Checking connection ...</p>
-	 				</div>
-	 			</div>
-	 			<div class="uk-width-medium-1-3">
-	 				<div class="uk-panel uk-panel-box">
-						<a href="#" style="float:right;" class="uk-close"></a>
-	 					<h3 class="uk-panel-title">SPARROW<span style="float:right;margin-right:10px;margin-top:2px" class="uk-badge">Checking</span></h3>
-	 					<hr />
-	 				</div>
-	 			</div>
-				<div v-for="qmgr in queueManagers" class="uk-width-medium-1-3">
+				<div v-for="qmgr in queueManagers" class="uk-width-medium-1-3 uk-width-small-1-1">
 					<div class="uk-panel uk-panel-box">
 						<a href="#" style="float:right;" class="uk-close"></a>
-						<h3 class="uk-panel-title">{{ qmgr.name }}<span style="float:right;margin-right:10px;margin-top:2px" class="uk-badge">Checking</span></h3>
+						<h3 class="uk-panel-title">{{ qmgr.name }}
+							<span v-if="qmgr.status == 2" style="float:right;margin-right:10px;margin-top:2px" class="uk-badge uk-badge-success">Ok</span>
+							<span v-if="qmgr.status == 0" style="float:right;margin-right:10px;margin-top:2px" class="uk-badge uk-badge-warning">Not Connected</span>
+							<span v-if="qmgr.status == 1" style="float:right;margin-right:10px;margin-top:2px;width:20px" class="loader"></span>
+							<span v-if="qmgr.status == 3" style="float:right;margin-right:10px;margin-top:2px" class="uk-badge uk-badge-danger">Failed</span>
+						</h3>
 						<hr />
+						<div v-if="qmgr.status == 1" class="uk-alert uk-alert-info">
+							Trying to connect to queuemanager {{ qmgr.name }} ...
+						</div>
+						<div v-if="qmgr.error" class="uk-alert uk-alert-danger">
+							<i class="uk-icon-exclamation-circle"></i> The connection failed with <strong>{{ qmgr.error.reason.code }} - {{ qmgr.error.reason.desc }}</strong>.
+							<br />
+							<span class="uk-text-small">
+								Retry by clicking on <i class="uk-icon-refresh"></i> and if the problem persists contact your WebSphere MQ administration team.
+							</span>
+						</div>
+						<hr />
+						<a href="#"><i class="uk-icon-refresh"></i></a>
+						<span class="uk-float-right" v-if="qmgr.connection_time"><i class="uk-icon-clock-o uk-icon-justify"></i>&nbsp;{{ qmgr.connection_time }}</span>
 					</div>
 				</div>
 			</div>
@@ -110,12 +107,63 @@
 				});
 			}
 
+			const QMGR_STATUS_NOT_CONNECTED = 0;
+			const QMGR_STATUS_CONNECTING = 1;
+			const QMGR_STATUS_CONNECTED = 2;
+			const QMGR_STATUS_CONNECTION_FAILED = 3;
+
+			var queueManagerCache = Object.create(null);
+			queueManagerCache.list = [];
+			queueManagerCache.data = Object.create(null);
+
+			var queueManagerStore = Object.create(null);
+
+			queueManagerStore.load = function() {
+				queueManagerCache.data = Lockr.get('queueManagers', Object.create(null));
+				for(var qmgr in queueManagerCache.data) {
+					queueManagerCache.data[qmgr].status = QMGR_STATUS_NOT_CONNECTED;
+					queueManagerCache.data[qmgr].error = null;
+					queueManagerCache.data[qmgr].connection_time = null;
+					queueManagerCache.list.push(queueManagerCache.data[qmgr]);
+				}
+				return queueManagerCache.list;
+			};
+
+			queueManagerStore.add = function(qmgr) {
+				var newQmgr = Object.create(null);
+				newQmgr.name = qmgr;
+				queueManagerCache.data[qmgr] = newQmgr;
+				return newQmgr;
+			};
+
+			queueManagerStore.connect = function(qmgr) {
+				return new Promise(function(resolve, reject) {
+					queueManagerCache.data[qmgr.name].status = QMGR_STATUS_CONNECTING;
+					return getJSON("/api/qmgr/inquire/" + qmgr.name)
+						.then(function(data) {
+							queueManagerCache.data[qmgr.name].connection_time = moment().format('LLL');
+							if ( data.error ) {
+								queueManagerCache.data[qmgr.name].status = QMGR_STATUS_CONNECTION_FAILED;
+								queueManagerCache.data[qmgr.name].error = data.error;
+								reject(data.error);
+							} else {
+								queueManagerCache.data[qmgr.name].status = QMGR_STATUS_CONNECTED;
+								resolve(data);
+							}
+						});
+				});
+			};
+
+			queueManagerStore.save = function() {
+				Lockr.set("queueManagers", queueManagerCache.data);
+			};
+
+			var availableQueueManagers = [];
+
 			$(document).ready(function() {
 
-				var availableQueueManagers = [];
 				getJSON("/api/mqweb/list").then(function(data) {
 					availableQueueManagers = data.queuemanagers;
-					console.log(availableQueueManagers);
 				});
 
 				var autocomplete = $.UIkit.autocomplete($('#queueManagerAutoComplete'), {
@@ -125,7 +173,9 @@
 						for(var qmgr in availableQueueManagers ) {
 							var qmgrName = availableQueueManagers[qmgr];
 							if ( qmgrName.toLowerCase().indexOf(search.toLowerCase()) > -1 ) {
-								qmgrs.push({ value : availableQueueManagers[qmgr]});
+								if ( ! vm.$data.queueManagers[qmgrName] ) {
+									qmgrs.push({ value : availableQueueManagers[qmgr]});
+								}
 							}
 						}
 						return release(qmgrs);
@@ -144,14 +194,28 @@
 					},
 					el : '#app',
 					ready : function() {
-						this.queueManagers = Lockr.get('queueManagers', []);
+						this.queueManagers = queueManagerStore.load();
+						for(var qmgr in this.queueManagers) {
+							queueManagerStore.connect(this.queueManagers[qmgr])
+								.then(function(data) {
+									console.log(data);
+								})
+								.catch(function(error) {
+									console.log(error);
+									//this.queueManagers[qmgr].error = error;
+								});
+						}
+					},
+					computed : {
+						noQmgrs : function() {
+							return $.isEmptyObject(this.queueManagers)
+						}
 					},
 					methods : {
 						add : function() {
-							this.queueManagers.push({ name : this.queueManager });
+							this.queueManagers.push(queueManagerStore.add(this.queueManager));
 							this.queueManager = '';
 							this.search = '';
-							Lockr.set("queueManagers", this.queueManagers);
 						}
 					},
 					watch : {
@@ -159,9 +223,6 @@
 							if ( this.queueManager != nv ) {
 								this.queueManager = '';
 							}
-						},
-						queueManagers : function(nv, ov) {
-							console.log(this.queueManagers);
 						}
 					}
 				});
