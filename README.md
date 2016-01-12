@@ -32,4 +32,8 @@ mq.web.app=*mqwebapp-path*
 
 > Note that this will only work with MQWeb version 0.1.0 (currently in [development](https://github.com/fbraem/mqweb)) and above.
 
+## Screenshots
 
+### Error
+
+![full screen mode](https://raw.github.com/fbraem/mqwebapp/screenshots/screenshots/mqwebapp_error.png)
