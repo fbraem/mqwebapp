@@ -22,7 +22,8 @@ This will install:
 [UIKit](http://getuikit.com/) - A lightweight and modular front-end framework for developing fast and powerful web interfaces  
 [fetch.js](https://github.com/github/fetch) - A window.fetch JavaScript polyfill  
 [es6-promise](https://github.com/jakearchibald/es6-promise) - A polyfill for ES6-style Promises  
-[lockr](https://github.com/tsironis/lockr) - A minimal API wrapper for localStorage
+[lockr](https://github.com/tsironis/lockr) - A minimal API wrapper for localStorage  
+[momentjs](http://momentjs.com/) - Parse, validate, manipulate, and display dates in JavaScript.
 
 ## Configure
 
