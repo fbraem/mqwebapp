@@ -74,14 +74,14 @@
 							Trying to connect to queuemanager {{ qmgr.name }} ...
 						</div>
 						<div v-if="qmgr.error" class="uk-alert uk-alert-danger">
-							<i class="uk-icon-exclamation-circle"></i> The connection failed with <strong>{{ qmgr.error.reason.code }} - {{ qmgr.error.reason.desc }}</strong>.
+							<i class="uk-icon-exclamation-circle"></i> The connection failed with reason code <strong>{{ qmgr.error.reason.code }} - {{ qmgr.error.reason.desc }}</strong>.
 							<br />
 							<span class="uk-text-small">
 								Retry by clicking on <i class="uk-icon-refresh"></i> and if the problem persists contact your WebSphere MQ administration team.
 							</span>
 						</div>
 						<hr />
-						<a href="#"><i class="uk-icon-refresh"></i></a>
+						<a v-on:click.prevent="connect($index)"><i class="uk-icon-refresh"></i></a>
 						<span class="uk-float-right" v-if="qmgr.connection_time"><i class="uk-icon-clock-o uk-icon-justify"></i>&nbsp;{{ qmgr.connection_time }}</span>
 					</div>
 				</div>
@@ -141,7 +141,7 @@
 					queueManagerCache.data[qmgr.name].status = QMGR_STATUS_CONNECTING;
 					return getJSON("/api/qmgr/inquire/" + qmgr.name)
 						.then(function(data) {
-							queueManagerCache.data[qmgr.name].connection_time = moment().format('LLL');
+							queueManagerCache.data[qmgr.name].connection_time = moment().format('LL LTS');
 							if ( data.error ) {
 								queueManagerCache.data[qmgr.name].status = QMGR_STATUS_CONNECTION_FAILED;
 								queueManagerCache.data[qmgr.name].error = data.error;
@@ -197,12 +197,8 @@
 						this.queueManagers = queueManagerStore.load();
 						for(var qmgr in this.queueManagers) {
 							queueManagerStore.connect(this.queueManagers[qmgr])
-								.then(function(data) {
-									console.log(data);
-								})
 								.catch(function(error) {
-									console.log(error);
-									//this.queueManagers[qmgr].error = error;
+									// Handled in the view
 								});
 						}
 					},
@@ -216,6 +212,16 @@
 							this.queueManagers.push(queueManagerStore.add(this.queueManager));
 							this.queueManager = '';
 							this.search = '';
+						},
+						connect : function(idx) {
+							queueManagerStore.connect(this.queueManagers[idx])
+								.then(function(data){
+									console.log(data);
+								})
+								.catch(function(error) {
+									console.log(error);
+									// Handled in the view
+								});
 						}
 					},
 					watch : {
