@@ -13,17 +13,16 @@ Clone the repository or download a copy and extract it somewhere on your system 
 
 ## Bower
 
-MQWebApp uses some libraries which must be installed using [Bower](http://bower.io). Run Bower in the folder where you extracted the code or cloned the repository.
+MQWebApp uses some libraries which must be installed using [npm](https://www.npmjs.com/). Run npm install in the folder where you extracted the code or cloned the repository.
 
-This will install:
+When everything is installed you need to build MQWebApp using webpack:
 
-[JQuery](http://jquery.com) - A fast, small, and feature-rich JavaScript library  
-[Vue.js](http://vuejs.org) - Reactive Components for Modern Web Interfaces  
-[UIKit](http://getuikit.com/) - A lightweight and modular front-end framework for developing fast and powerful web interfaces  
-[fetch.js](https://github.com/github/fetch) - A window.fetch JavaScript polyfill  
-[es6-promise](https://github.com/jakearchibald/es6-promise) - A polyfill for ES6-style Promises  
-[lockr](https://github.com/tsironis/lockr) - A minimal API wrapper for localStorage  
-[momentjs](http://momentjs.com/) - Parse, validate, manipulate, and display dates in JavaScript.
+    ./node_modules/.bin/webpack
+
+When the build is successful, you have two options to run the app:
+
+1. Use [node](http;//nodejs.org) and the server.js script.
+2. Copy the html files and the build folder to a webserver.
 
 ## Configure
 
