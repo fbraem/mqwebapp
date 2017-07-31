@@ -25,24 +25,39 @@ const mutations = {
             name : queuemanager,
             meta : null,
             status : null,
-            detail : null
+            detail : null,
+            error : null
         });
         var removeIndex = state.availableQueuemanagers.indexOf(queuemanager);
         if (removeIndex >= 0) state.availableQueuemanagers.splice(removeIndex, 1);
     },
     status(state, payload) {
         var queuemanager = state.queuemanagers.find((qmgr) => {
-            return qmgr.name == payload.meta.qmgr;
-        })
-        queuemanager.status = payload.data[0];
-        queuemanager.meta = payload.meta;
+            return qmgr.name == payload.queuemanager;
+        });
+        if (queuemanager) {
+            if (payload.json.error) {
+                queuemanager.error = payload.json.error;
+                queuemanager.status = null;
+            } else {
+                queuemanager.status = payload.json.data[0];
+            }
+            queuemanager.meta = payload.json.meta;
+        }
     },
     detail(state, payload) {
         var queuemanager = state.queuemanagers.find((qmgr) => {
-            return qmgr.name == payload.meta.qmgr;
-        })
-        queuemanager.detail = payload.data[0];
-        queuemanager.meta = payload.meta;
+            return qmgr.name == payload.queuemanager;
+        });
+        if (queuemanager) {
+            if (payload.json.error) {
+                queuemanager.error = payload.json.error;
+                queuemanager.detail = null;
+            } else {
+                queuemanager.detail = payload.json.data[0];
+            }
+            queuemanager.meta = payload.json.meta;
+        }
     }
 };
 
@@ -62,13 +77,19 @@ const actions = {
     inquireQueuemanagerStatus(context, payload) {
         client.get('http://localhost:8081/api/qmstatus/inquire/' + payload.queuemanager)
             .then((response) => {
-                context.commit('status', response.data);
+                context.commit('status', {
+                    queuemanager : payload.queuemanager,
+                    json : response.data
+                });
             });
     },
     inquireQueuemanager(context, payload) {
         client.get('http://localhost:8081/api/qmgr/inquire/' + payload.queuemanager)
             .then((response) => {
-                context.commit('detail', response.data);
+                context.commit('detail', {
+                    queuemanager : payload.queuemanager,
+                    json : response.data
+                });
             });
     }
 };

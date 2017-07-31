@@ -2,7 +2,7 @@
     <site>
         <div slot="content">
             <section v-if="selectableQueuemanagers.length > 0" class="uk-section uk-section-small uk-container uk-container-expand uk-section-muted">
-                <div class="uk-flex-center" uk-grid>
+                <div class="uk-flex-center uk-margin-remove-left" uk-grid>
                     <div>
                         <select v-model="selectedQueuemanager" class="uk-select" id="form-availableQueuemanagers">
                             <option value="">Please select a queuemanager ...</option>
@@ -17,7 +17,7 @@
                 </div>
             </section>
             <section class="uk-section uk-section-small uk-container uk-container-expand">
-                <div v-if="queuemanagers.length == 0" class="uk-flex-center" uk-grid>
+                <div v-if="queuemanagers.length == 0" class="uk-flex-center uk-margin-remove-left" uk-grid>
                     <div class="uk-alert uk-alert-warning uk-width-2-3@m">
                         Currently there are no queuemanagers selected to show on this page. Please select some queuemanagers from the list above
                         and add them to this page. When you don't see a list, contact your Websphere MQ administrator to check if MQWeb is
@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div v-else>
-                    <div v-for="queuemanager in queuemanagers" class="uk-card uk-card-default uk-width-1-1@s uk-width-2-5@m uk-width-1-4@xl">
+                    <div v-for="queuemanager in queuemanagers" class="uk-card uk-card-default uk-width-1-1@s uk-width-1-2@m uk-width-1-4@xl">
                         <div class="uk-card-header">
                             <h3 class="uk-card-title">{{ queuemanager.name }}</h3>
                             <div v-if="queuemanager.detail && queuemanager.detail.QMgrDesc.value.length > 0" class="uk-text-meta">{{ queuemanager.detail.QMgrDesc.value }}</div>
@@ -60,13 +60,19 @@
                                     </div>
                                 </li>
                             </ul>
+                            <div v-if="queuemanager.error">
+                                <div class="uk-alert uk-alert-danger uk-text-small">
+                                    The MQ action failed with reason code <span class="uk-text-bold uk-text-nowrap">{{ queuemanager.error.reason.code }} - {{ queuemanager.error.reason.desc }}</span>.
+                                    If the problem persists, contact your Websphere MQ administration team.
+                                </div>
+                            </div>
                         </div>
                         <div class="uk-card-footer">
                             <div class="uk-grid">
                                 <div class="uk-width-expand">
                                     <span class="uk-text-meta" v-if="!queuemanager.meta">Not connected yet.</span>
                                     <span class="uk-text-meta" v-if="queuemanager.meta">
-                                        Last connected on {{ formatDate(queuemanager.meta.date.start) }}
+                                        Last action run on {{ formatDate(queuemanager.meta.date.start) }}
                                     </span>
                                 </div>
                                 <div>
@@ -110,7 +116,7 @@
             addQueuemanager() {
                 this.$store.dispatch('addQueuemanager', { queuemanager : this.selectedQueuemanager });
             },
-            inquireStatus(queuemanager) {
+            inquireQueuemanagerStatus(queuemanager) {
                 this.$store.dispatch('inquireQueuemanagerStatus', { queuemanager : queuemanager});
             },
             inquireQueuemanager(queuemanager) {
