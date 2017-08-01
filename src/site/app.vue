@@ -31,7 +31,7 @@
                               <h3 class="uk-card-title">{{ queuemanager.name }}</h3>
                               <div v-if="queuemanager.detail && queuemanager.detail.QMgrDesc.value.length > 0" class="uk-text-meta">{{ queuemanager.detail.QMgrDesc.value }}</div>
                             </div>
-                            <div class="uk-card-body">
+                            <div class="uk-card-body uk-padding-small">
                               <ul class="uk-list uk-list-divider">
                                   <li>
                                       <div class="uk-grid">
