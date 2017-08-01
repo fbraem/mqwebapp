@@ -24,63 +24,65 @@
                         correctly configured.
                     </div>
                 </div>
-                <div v-else>
-                    <div v-for="queuemanager in queuemanagers" class="uk-card uk-card-default uk-width-1-1@s uk-width-1-2@m uk-width-1-4@xl">
-                        <div class="uk-card-header">
-                            <h3 class="uk-card-title">{{ queuemanager.name }}</h3>
-                            <div v-if="queuemanager.detail && queuemanager.detail.QMgrDesc.value.length > 0" class="uk-text-meta">{{ queuemanager.detail.QMgrDesc.value }}</div>
-                        </div>
-                        <div class="uk-card-body">
-                            <ul class="uk-list uk-list-divider">
-                                <li>
-                                    <div class="uk-grid">
-                                        <div class="uk-width-expand">
-                                            Status<br />
-                                            <span v-if="!queuemanager.status" class="uk-text-meta">What's the status of this queuemanager?</span>
-                                            <p v-else class="uk-text-meta">
-                                                <span :class="{ 'uk-text-success' : queuemanager.status.QMgrStatus.text == 'Running' }">
-                                                    <span v-if="queuemanager.status.QMgrStatus.text == 'Running'" uk-icon="icon: check"></span>{{ queuemanager.status.QMgrStatus.text }}
+                <div v-else class="uk-grid">
+                    <div v-for="queuemanager in queuemanagers" class="uk-width-1-1@s uk-width-1-2@m uk-width-1-4@xl">
+                        <div class="uk-card uk-card-default">
+                          <div class="uk-card-header">
+                              <h3 class="uk-card-title">{{ queuemanager.name }}</h3>
+                              <div v-if="queuemanager.detail && queuemanager.detail.QMgrDesc.value.length > 0" class="uk-text-meta">{{ queuemanager.detail.QMgrDesc.value }}</div>
+                            </div>
+                            <div class="uk-card-body">
+                              <ul class="uk-list uk-list-divider">
+                                  <li>
+                                      <div class="uk-grid">
+                                          <div class="uk-width-expand">
+                                              Status<br />
+                                              <span v-if="!queuemanager.status" class="uk-text-meta">What's the status of this queuemanager?</span>
+                                              <span v-else class="uk-text-meta">
+                                                  <span :class="{ 'uk-text-success' : queuemanager.status.QMgrStatus.text == 'Running' }">
+                                                      <span v-if="queuemanager.status.QMgrStatus.text == 'Running'" uk-icon="icon: check"></span>{{ queuemanager.status.QMgrStatus.text }}
+                                                  </span>
                                                 </span>
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <a class="uk-float-right" uk-icon="icon: more" @click="inquireQueuemanagerStatus(queuemanager.name)"></a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="uk-grid">
-                                        <div class="uk-width-expand">
-                                            Queues<br />
-                                            <span class="uk-text-meta">Are there queues that contain messages?</span>
-                                        </div>
-                                        <div>
-                                            <a class="uk-float-right" uk-icon="icon: more"></a>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                            <div v-if="queuemanager.error">
-                                <div class="uk-alert uk-alert-danger uk-text-small">
-                                    The MQ action failed with reason code <span class="uk-text-bold uk-text-nowrap">{{ queuemanager.error.reason.code }} - {{ queuemanager.error.reason.desc }}</span>.
-                                    If the problem persists, contact your Websphere MQ administration team.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="uk-card-footer">
-                            <div class="uk-grid">
-                                <div class="uk-width-expand">
-                                    <span class="uk-text-meta" v-if="!queuemanager.meta">Not connected yet.</span>
-                                    <span class="uk-text-meta" v-if="queuemanager.meta">
-                                        Last action run on {{ formatDate(queuemanager.meta.date.start) }}
-                                    </span>
-                                </div>
-                                <div>
-                                    <a class="uk-float-right" uk-icon="icon: play" @click="inquireQueuemanager(queuemanager.name)"></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                          </div>
+                                          <div>
+                                              <a class="uk-float-right" uk-icon="icon: more" @click="inquireQueuemanagerStatus(queuemanager.name)"></a>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="uk-grid">
+                                          <div class="uk-width-expand">
+                                              Queues<br />
+                                              <span class="uk-text-meta">Are there queues that contain messages?</span>
+                                          </div>
+                                          <div>
+                                              <a class="uk-float-right" uk-icon="icon: more"></a>
+                                          </div>
+                                      </div>
+                                  </li>
+                              </ul>
+                              <div v-if="queuemanager.error">
+                                  <div class="uk-alert uk-alert-danger uk-text-small">
+                                      The MQ action failed with reason code <span class="uk-text-bold uk-text-nowrap">{{ queuemanager.error.reason.code }} - {{ queuemanager.error.reason.desc }}</span>.
+                                      If the problem persists, contact your Websphere MQ administration team.
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="uk-card-footer">
+                              <div class="uk-grid">
+                                  <div class="uk-width-expand">
+                                      <span class="uk-text-meta" v-if="!queuemanager.meta">Not connected yet.</span>
+                                      <span class="uk-text-meta" v-if="queuemanager.meta">
+                                          Last action run on {{ formatDate(queuemanager.meta.date.start) }}
+                                      </span>
+                                  </div>
+                                  <div>
+                                      <a class="uk-float-right" uk-icon="icon: play" @click="inquireQueuemanager(queuemanager.name)"></a>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
                 </div>
             </section>
         </div>
