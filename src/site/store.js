@@ -5,6 +5,8 @@ Vue.use(Vuex);
 
 import client from '@/js/client.js';
 
+import config from 'config';
+
 const state = {
     queuemanagers : [],
     availableQueuemanagers : []
@@ -63,7 +65,7 @@ const mutations = {
 
 const actions = {
     loadAvailable(context, payload) {
-        client.get('http://localhost:8081/api/mqweb/list', {
+        client.get(config.mqweb + '/api/mqweb/list', {
             data : payload
         }).then((response) => {
             context.commit('availableQueuemanagers', response.data.data);
@@ -75,7 +77,7 @@ const actions = {
         context.commit('addQueuemanager', payload.queuemanager);
     },
     inquireQueuemanagerStatus(context, payload) {
-        client.get('http://localhost:8081/api/qmstatus/inquire/' + payload.queuemanager)
+        client.get(config.mqweb + '/api/qmstatus/inquire/' + payload.queuemanager)
             .then((response) => {
                 context.commit('status', {
                     queuemanager : payload.queuemanager,
@@ -84,7 +86,7 @@ const actions = {
             });
     },
     inquireQueuemanager(context, payload) {
-        client.get('http://localhost:8081/api/qmgr/inquire/' + payload.queuemanager)
+        client.get(config.mqweb + '/api/qmgr/inquire/' + payload.queuemanager)
             .then((response) => {
                 context.commit('detail', {
                     queuemanager : payload.queuemanager,

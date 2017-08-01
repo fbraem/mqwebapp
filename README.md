@@ -18,6 +18,13 @@ where you extracted MQWebApp or where you cloned the repository and run npm:
 
     npm install
 
+## Configure
+
+MQWebApp needs to know where MQWeb is. Go to the config folder and change the corresponding
+environment script.
+
+## Build
+
 When everything is installed you need to build MQWebApp using webpack:
 
     ./node_modules/.bin/webpack
@@ -28,7 +35,7 @@ When the build is successful, you have some options to run the app:
 2. Copy the html files and the build folder to a webserver.
 3. Let [MQWeb](http://www.mqweb.org) serve the files.
 
-## Configure
+## MQWeb
 
 When you have choosen option 3, MQWeb, you need to add the following property
 to mqweb.properties:

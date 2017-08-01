@@ -5,6 +5,8 @@ function resolve(dir) {
     return path.join(__dirname, dir);
 }
 
+var environment = process.env.NODE_ENV === 'production' ? 'production' : 'development';
+
 var config = {
     entry : {
         "site" : "./src/site/main.js"
@@ -33,18 +35,11 @@ var config = {
     resolve : {
         alias : {
             'vue$' : 'vue/dist/vue.common.js',
-            '@' : resolve('src')
+            '@' : resolve('src'),
+            'config' : path.join(__dirname, 'config', environment)
         }
     },
     plugins : [
-/*
-        new webpack.ProvidePlugin({
-            $ : "jquery",
-            jQuery : "jquery",
-            "window.$" : "$",
-            "window.jQuery" : "jquery"
-        }),
-*/
         // Workaround to exclude moment.js locales
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
     ]
