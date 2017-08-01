@@ -3,6 +3,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 Vue.use(Vuex);
 
+import Lockr from 'lockr';
+
 import client from '@/js/client.js';
 
 import config from 'config';
@@ -14,11 +16,29 @@ const state = {
 
 const getters = {
     selectableQueuemanagers(state) {
-        return state.availableQueuemanagers;
+        var selectable = state.availableQueuemanagers.filter(function(name) {
+            var search = state.queuemanagers.find(function(queuemanager) {
+                return queuemanager.name == name;
+            });
+            if (search) return false;
+            return true;
+        });
+        return selectable;
     }
 };
 
 const mutations = {
+    queuemanagers(state, queuemanagers) {
+        queuemanagers.forEach(function(queuemanager) {
+            state.queuemanagers.push({
+                name : queuemanager,
+                meta : null,
+                status : null,
+                detail : null,
+                error : null
+            });
+        });
+    },
     availableQueuemanagers(state, queuemanagers) {
         state.availableQueuemanagers = queuemanagers;
     },
@@ -32,6 +52,11 @@ const mutations = {
         });
         var removeIndex = state.availableQueuemanagers.indexOf(queuemanager);
         if (removeIndex >= 0) state.availableQueuemanagers.splice(removeIndex, 1);
+
+        var localStorageQueuemanagers = state.queuemanagers.map(function(queuemanager) {
+          return queuemanager.name;
+        });
+        Lockr.set('queuemanagers', localStorageQueuemanagers);
     },
     status(state, payload) {
         var queuemanager = state.queuemanagers.find((qmgr) => {
@@ -72,6 +97,10 @@ const actions = {
         }).catch((err) => {
             console.log(err);
         });
+    },
+    loadQueuemanagers(context, payload) {
+      var queuemanagers = Lockr.get('queuemanagers', []);
+      context.commit('queuemanagers', queuemanagers);
     },
     addQueuemanager(context, payload) {
         context.commit('addQueuemanager', payload.queuemanager);

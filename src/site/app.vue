@@ -113,10 +113,12 @@
         },
         mounted() {
             this.$store.dispatch('loadAvailable');
+            this.$store.dispatch('loadQueuemanagers');
         },
         methods : {
             addQueuemanager() {
                 this.$store.dispatch('addQueuemanager', { queuemanager : this.selectedQueuemanager });
+                this.selectedQueuemanager = "";
             },
             inquireQueuemanagerStatus(queuemanager) {
                 this.$store.dispatch('inquireQueuemanagerStatus', { queuemanager : queuemanager});
