@@ -28,6 +28,7 @@
                     <div v-for="queuemanager in queuemanagers" class="uk-width-1-1@s uk-width-1-2@m uk-width-1-4@xl">
                         <div class="uk-card uk-card-default">
                           <div class="uk-card-header">
+                              <div v-if="queuemanager.detail" class="uk-card-badge uk-label">{{ queuemanager.detail.Platform.text }}</div>
                               <h3 class="uk-card-title">{{ queuemanager.name }}</h3>
                               <div v-if="queuemanager.detail && queuemanager.detail.QMgrDesc.value.length > 0" class="uk-text-meta">{{ queuemanager.detail.QMgrDesc.value }}</div>
                             </div>
