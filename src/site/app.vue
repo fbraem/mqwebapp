@@ -27,13 +27,16 @@
                 <div v-else class="uk-grid">
                     <div v-for="queuemanager in queuemanagers" class="uk-width-1-1@s uk-width-1-2@m uk-width-1-4@xl">
                         <div class="uk-card uk-card-default">
-                          <div class="uk-card-header">
-                              <div v-if="queuemanager.detail" class="uk-card-badge uk-label">{{ queuemanager.detail.Platform.text }}</div>
-                              <h3 class="uk-card-title">{{ queuemanager.name }}</h3>
-                              <div v-if="queuemanager.detail && queuemanager.detail.QMgrDesc.value.length > 0" class="uk-text-meta">{{ queuemanager.detail.QMgrDesc.value }}</div>
+                            <div class="uk-card-header">
+                                <h3 class="uk-card-title">{{ queuemanager.name }}</h3>
+                                <div v-if="queuemanager.detail" class="uk-card-badge uk-label">{{ queuemanager.detail.Platform.text }}</div>
+                                <div v-if="queuemanager.detail && queuemanager.detail.QMgrDesc.value.length > 0" class="uk-text-meta">{{ queuemanager.detail.QMgrDesc.value }}</div>
                             </div>
                             <div class="uk-card-body uk-padding-small">
                               <ul class="uk-list uk-list-divider">
+                                  <li>
+                                      <detail :queuemanager="queuemanager"></detail>
+                                  </li>
                                   <li>
                                       <status :queuemanager="queuemanager"></status>
                                   </li>
@@ -64,9 +67,6 @@
                                           Last action run on {{ formatDate(queuemanager.meta.date.start) }}
                                       </span>
                                   </div>
-                                  <div>
-                                      <a class="uk-float-right" uk-icon="icon: play" @click="inquireQueuemanager(queuemanager.name)"></a>
-                                  </div>
                               </div>
                           </div>
                       </div>
@@ -79,6 +79,7 @@
 
 <script>
     import Site from './components/site.vue';
+    import Detail from './detail.vue';
     import Status from './status.vue';
 
     import moment from 'moment';
@@ -86,6 +87,7 @@
     export default {
         components : {
             Site,
+            Detail,
             Status
         },
         data() {
@@ -109,12 +111,6 @@
             addQueuemanager() {
                 this.$store.dispatch('addQueuemanager', { queuemanager : this.selectedQueuemanager });
                 this.selectedQueuemanager = "";
-            },
-            inquireQueuemanagerStatus(queuemanager) {
-                this.$store.dispatch('inquireQueuemanagerStatus', { queuemanager : queuemanager});
-            },
-            inquireQueuemanager(queuemanager) {
-                this.$store.dispatch('inquireQueuemanager', { queuemanager : queuemanager});
             },
             formatDate(date) {
                 return moment(date).format('L LTS');
