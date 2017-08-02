@@ -34,20 +34,7 @@
                             <div class="uk-card-body uk-padding-small">
                               <ul class="uk-list uk-list-divider">
                                   <li>
-                                      <div class="uk-grid">
-                                          <div class="uk-width-expand">
-                                              Status<br />
-                                              <span v-if="!queuemanager.status" class="uk-text-meta">What's the status of this queuemanager?</span>
-                                              <span v-else class="uk-text-meta">
-                                                  <span :class="{ 'uk-text-success' : queuemanager.status.QMgrStatus.text == 'Running' }">
-                                                      <span v-if="queuemanager.status.QMgrStatus.text == 'Running'" uk-icon="icon: check"></span>{{ queuemanager.status.QMgrStatus.text }}
-                                                  </span>
-                                                </span>
-                                          </div>
-                                          <div>
-                                              <a class="uk-float-right" uk-icon="icon: more" @click="inquireQueuemanagerStatus(queuemanager.name)"></a>
-                                          </div>
-                                      </div>
+                                      <status :queuemanager="queuemanager"></status>
                                   </li>
                                   <li>
                                       <div class="uk-grid">
@@ -91,12 +78,14 @@
 
 <script>
     import Site from './components/site.vue';
+    import Status from './status.vue';
 
     import moment from 'moment';
 
     export default {
         components : {
-            Site
+            Site,
+            Status
         },
         data() {
             return {
