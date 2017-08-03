@@ -24,7 +24,7 @@
                         correctly configured.
                     </div>
                 </div>
-                <div v-else class="uk-grid">
+                <div v-else class="uk-grid-match" uk-grid>
                     <div v-for="queuemanager in queuemanagers" class="uk-width-1-1@s uk-width-1-2@m uk-width-1-4@xl">
                         <div class="uk-card uk-card-default">
                             <div class="uk-card-header">
@@ -41,7 +41,7 @@
                                       <status :queuemanager="queuemanager"></status>
                                   </li>
                                   <li>
-                                      <div class="uk-grid">
+                                      <div uk-grid>
                                           <div class="uk-width-expand">
                                               Queues<br />
                                               <span class="uk-text-meta">Are there queues that contain messages?</span>
@@ -60,7 +60,7 @@
                               </div>
                           </div>
                           <div class="uk-card-footer">
-                              <div class="uk-grid">
+                              <div uk-grid>
                                   <div class="uk-width-expand">
                                       <span class="uk-text-meta" v-if="!queuemanager.meta">Not connected yet.</span>
                                       <span class="uk-text-meta" v-if="queuemanager.meta">
