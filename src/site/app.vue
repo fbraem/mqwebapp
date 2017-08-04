@@ -27,6 +27,12 @@
                 <div v-else class="uk-grid-match" uk-grid>
                     <div v-for="queuemanager in queuemanagers" class="uk-width-1-1@s uk-width-1-2@m uk-width-1-4@xl">
                         <div class="uk-card uk-card-default">
+                            <div v-if="inErrorState(queuemanager.name) == 1" style="display:table;width:100%;border:1px solid #ddd;border-top:0">
+                                <span style="display:table-cell;line-height:8px;width:100%;background-color:red;text-indent:-9999px">ERROR</span>
+                            </div>
+                            <div v-if="inErrorState(queuemanager.name) == 0" style="display:table;width:100%;border:1px solid #ddd;border-top:0">
+                                <span style="display:table-cell;line-height:8px;width:100%;background-color:green;text-indent:-9999px">ERROR</span>
+                            </div>
                             <div class="uk-card-header">
                                 <h3 class="uk-card-title">{{ queuemanager.name }}</h3>
                                 <div v-if="queuemanager.detail" class="uk-card-badge uk-label">{{ queuemanager.detail.Platform.text }}</div>
@@ -114,6 +120,9 @@
             },
             formatDate(date) {
                 return moment(date).format('L LTS');
+            },
+            inErrorState(name) {
+                return this.$store.getters.inErrorState(name);
             }
         }
     }

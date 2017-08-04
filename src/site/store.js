@@ -24,6 +24,18 @@ const getters = {
             return true;
         });
         return selectable;
+    },
+    inErrorState: (state) => (name) => {
+        // 0 = OK, 1 = Error, -1 = no connection yet
+        var queuemanager = state.queuemanagers.find(function(queuemanager) {
+            return queuemanager.name == name;
+        });
+        if (queuemanager) {
+            if (queuemanager.meta == null) return -1;
+            if (queuemanager.error == null) return 0;
+            return 1;
+        }
+        return -1;
     }
 };
 
