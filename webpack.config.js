@@ -10,7 +10,8 @@ var environment = process.env.NODE_ENV === 'production' ? 'production' : 'develo
 var config = {
     entry : {
         "site" : "./src/site/main.js",
-        "qmgr" : "./src/qmgr/main.js"
+        "qmgr" : "./src/qmgr/main.js",
+        "queues" : "./src/queues/main.js"
     },
     output : {
         filename : "./build/[name].js"
