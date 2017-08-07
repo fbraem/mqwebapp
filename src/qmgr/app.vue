@@ -3,6 +3,7 @@
         <div slot="content">
             <section class="uk-section uk-section-small uk-container uk-container-expand">
                 <h1 class="uk-heading-primary uk-heading-divider">
+                    <a href="" uk-icon="icon: menu; ratio: 2" uk-toggle="target: #offcanvas-menu"></a>
                     <span v-if="queuemanager" class="uk-label uk-float-right">{{ queuemanager.Platform.text }}</span>
                     {{ name }}
                 </h1>
@@ -173,6 +174,19 @@
                     </div>
                 </div>
             </section>
+            <div id="offcanvas-menu" uk-offcanvas="overlay:true">
+                <div class="uk-offcanvas-bar">
+                    <button class="uk-offcanvas-close" type="button" uk-close></button>
+                    <h3>{{ name }}</h3>
+                    <ul class="uk-nav uk-nav-default">
+                        <li><a :href="'status.html#/' + name">Status</a></li>
+                        <li><a :href="'clusters.html#/' + name">Clusters</a></li>
+                        <li><a :href="'queues.html#/' + name">Queues</a></li>
+                        <li><a :href="'channels.html#' + name">Channels</a></li>
+                        <li><a :href="'listeners.html#' + name">Listeners</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </site>
 </template>
