@@ -58,12 +58,7 @@
                                       </div>
                                   </li>
                               </ul>
-                              <div v-if="queuemanager.error">
-                                  <div class="uk-alert uk-alert-danger uk-text-small">
-                                      The MQ action failed with reason code <span class="uk-text-bold uk-text-nowrap">{{ queuemanager.error.reason.code }} - {{ queuemanager.error.reason.desc }}</span>.
-                                      If the problem persists, contact your Websphere MQ administration team.
-                                  </div>
-                              </div>
+                              <mqerror v-if="queuemanager.error" :error="queuemanager.error"></mqerror>
                           </div>
                           <div class="uk-card-footer">
                               <div uk-grid>
@@ -87,6 +82,7 @@
     import Site from './components/site.vue';
     import Detail from './detail.vue';
     import Status from './status.vue';
+    import Mqerror from './components/mqerror.vue';
 
     import moment from 'moment';
 
@@ -94,7 +90,8 @@
         components : {
             Site,
             Detail,
-            Status
+            Status,
+            Mqerror
         },
         data() {
             return {

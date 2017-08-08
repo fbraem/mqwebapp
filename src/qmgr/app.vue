@@ -7,6 +7,7 @@
                     <span v-if="queuemanager" class="uk-label uk-float-right">{{ queuemanager.Platform.text }}</span>
                     {{ name }}
                 </h1>
+                <mqerror v-if="error" :error="error"></mqerror>
                 <p v-if="queuemanager" class="uk-text-meta">{{ queuemanager.QMgrDesc.value }}</p>
                 <hr class="uk-divider" />
                 <div v-if="queuemanager" class="uk-child-width-1-2@s uk-child-width-2-3@m" uk-grid>
@@ -193,12 +194,14 @@
 
 <script>
     import Site from '@/site/components/site.vue';
+    import Mqerror from '@/site/components/mqerror.vue';
 
     import moment from 'moment';
 
     export default {
         components : {
-            Site
+            Site,
+            Mqerror
         },
         props : [
             'name'
@@ -210,6 +213,9 @@
         computed : {
             queuemanager() {
                 return this.$store.state.queuemanager;
+            },
+            error() {
+                return this.$store.state.error;
             },
             creationDatetime() {
                 var datetime = moment(this.queuemanager.CreationDate.value + ' ' + this.queuemanager.CreationTime.value, 'YYYYMMDD HHmmss');
