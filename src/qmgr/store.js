@@ -19,13 +19,12 @@ const getters = {
 const mutations = {
     detail(state, payload) {
         if (payload.json.error) {
-            state.queuemanager.error = payload.json.error;
+            state.error = payload.json.error;
             state.queuemanager = null;
         } else {
             state.queuemanager = payload.json.data[0];
         }
         state.meta = payload.json.meta;
-        console.log(state.queuemanager);
     }
 };
 
