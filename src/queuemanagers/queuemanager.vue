@@ -4,7 +4,7 @@
             <h1 class="uk-heading-primary uk-heading-divider">
                 <a href="" uk-icon="icon: menu; ratio: 2" uk-toggle="target: #offcanvas-menu"></a>
                 <span v-if="queuemanager" class="uk-label uk-float-right">{{ queuemanager.Platform.text }}</span>
-                {{ name }}
+                {{ queuemanagerName }}
             </h1>
             <mqerror v-if="error" :error="error"></mqerror>
             <p v-if="queuemanager" class="uk-text-meta">{{ queuemanager.QMgrDesc.value }}</p>
@@ -177,13 +177,13 @@
         <div id="offcanvas-menu" uk-offcanvas="overlay:true">
             <div class="uk-offcanvas-bar">
                 <button class="uk-offcanvas-close" type="button" uk-close></button>
-                <h3>{{ name }}</h3>
+                <h3>{{ queuemanagerName }}</h3>
                 <ul class="uk-nav uk-nav-default">
-                    <li><a :href="'status.html#/' + name">Status</a></li>
-                    <li><a :href="'clusters.html#/' + name">Clusters</a></li>
-                    <li><a :href="'queues.html#/' + name">Queues</a></li>
-                    <li><a :href="'channels.html#' + name">Channels</a></li>
-                    <li><a :href="'listeners.html#' + name">Listeners</a></li>
+                    <li><a :href="'status.html#/' + queuemanagerName">Status</a></li>
+                    <li><a :href="'clusters.html#/' + queuemanagerName">Clusters</a></li>
+                    <li><a :href="'queues.html#/' + queuemanagerName">Queues</a></li>
+                    <li><a :href="'channels.html#' + queuemanagerName">Channels</a></li>
+                    <li><a :href="'listeners.html#' + queuemanagerName">Listeners</a></li>
                 </ul>
             </div>
         </div>
@@ -200,7 +200,7 @@
             Mqerror
         },
         props : [
-            'name'
+            'queuemanagerName'
         ],
         data() {
             return {
@@ -208,7 +208,7 @@
         },
         computed : {
             queuemanager() {
-                var queuemanager = this.$store.getters['queuemanagerModule/getQueuemanager'](this.name);
+                var queuemanager = this.$store.getters['queuemanagerModule/getQueuemanager'](this.queuemanagerName);
                 if (queuemanager) return queuemanager.detail;
                 return null;
             },
@@ -226,7 +226,7 @@
 
         },
         mounted() {
-            this.$store.dispatch('queuemanagerModule/inquireQueuemanager', { queuemanager : this.name });
+            this.$store.dispatch('queuemanagerModule/inquireQueuemanager', { queuemanager : this.queuemanagerName });
         },
         methods : {
         }

@@ -31,7 +31,7 @@ const router = new VueRouter({
                     component : QueuemanagersApp
                 },
                 {
-                    path : '/:name',
+                    path : '/:queuemanagerName',
                     component : QueuemanagerApp,
                     props : true
                 },
