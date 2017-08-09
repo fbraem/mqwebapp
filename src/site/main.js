@@ -19,6 +19,7 @@ import SiteApp from './app.vue';
 import QueuemanagersApp from '@/queuemanagers/queuemanagers.vue';
 import QueuemanagerApp from '@/queuemanagers/queuemanager.vue';
 import QueuesApp from '@/queues/queues.vue';
+import QueueApp from '@/queues/queue.vue';
 
 const router = new VueRouter({
     routes : [
@@ -38,6 +39,11 @@ const router = new VueRouter({
                 {
                     path : '/:queuemanagerName/queues',
                     component : QueuesApp,
+                    props : true
+                },
+                {
+                    path : '/:queuemanagerName/queues/:queueName',
+                    component : QueueApp,
                     props : true
                 }
             ]

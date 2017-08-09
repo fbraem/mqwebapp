@@ -26,45 +26,47 @@
             <tbody>
                 <tr v-for="queue in queues">
                     <td>
-                        {{ queue.QName.value }}
-                        <div v-if="queue.QDesc.value.length > 0" class="uk-text-meta">
-                            {{ queue.QDesc.value }}
+                        <router-link :to="'/' + queuemanagerName + '/queues/' + queue.detail.QName.value">
+                            {{ queue.detail.QName.value }}
+                        </router-link>
+                        <div v-if="queue.detail.QDesc.value.length > 0" class="uk-text-meta">
+                            {{ queue.detail.QDesc.value }}
                         </div>
                     </td>
-                    <td>{{ queue.QType.text }}</td>
+                    <td>{{ queue.detail.QType.text }}</td>
                     <td>
-                        <span v-if="queue.CurrentQDepth">{{ queue.CurrentQDepth.value }}</span>
+                        <span v-if="queue.detail.CurrentQDepth">{{ queue.detail.CurrentQDepth.value }}</span>
                         <span v-else>-</span>
                     </td>
                     <td>
-                        <span v-if="queue.OpenInputCount">{{ queue.OpenInputCount.value }}</span>
+                        <span v-if="queue.detail.OpenInputCount">{{ queue.detail.OpenInputCount.value }}</span>
                         <span v-else>-</span>
                     </td>
                     <td>
-                        <span v-if="queue.InhibitGet">
-                            <i v-if="queue.InhibitGet.text == 'Allowed'" style="color: green" uk-icon="icon: check"></i>
+                        <span v-if="queue.detail.InhibitGet">
+                            <i v-if="queue.detail.InhibitGet.text == 'Allowed'" style="color: green" uk-icon="icon: check"></i>
                             <i v-else style="color: red" uk-icon="icon: close"></i>
                         </span>
                         <span v-else>-</span>
                     </td>
                     <td>
-                        <span v-if="queue.OpenOutputCount">{{ queue.OpenOutputCount.value }}</span>
+                        <span v-if="queue.detail.OpenOutputCount">{{ queue.detail.OpenOutputCount.value }}</span>
                         <span v-else>-</span>
                     </td>
                     <td>
-                        <span v-if="queue.InhibitPut">
-                            <i v-if="queue.InhibitPut.text == 'Allowed'" style="color: green" uk-icon="icon: check"></i>
+                        <span v-if="queue.detail.InhibitPut">
+                            <i v-if="queue.detail.InhibitPut.text == 'Allowed'" style="color: green" uk-icon="icon: check"></i>
                             <i v-else style="color: red" uk-icon="icon: close"></i>
                         </span>
                         <span v-else>-</span>
                     </td>
                     <td>
-                        <span v-if="queue.CreationDate">
-                            {{ formatDate(queue.CreationDate.value + ' ' + queue.CreationTime.value) }}
+                        <span v-if="queue.detail.CreationDate">
+                            {{ formatDate(queue.detail.CreationDate.value + ' ' + queue.detail.CreationTime.value) }}
                         </span>
                         <br />
-                        <span v-if="queue.AlterationDate">
-                            {{ formatDate(queue.AlterationDate.value + ' ' + queue.AlterationTime.value) }}
+                        <span v-if="queue.detail.AlterationDate">
+                            {{ formatDate(queue.detail.AlterationDate.value + ' ' + queue.detail.AlterationTime.value) }}
                         </span>
                     </td>
                 </tr>
@@ -91,14 +93,14 @@
                 var queues = this.$store.state.queueModule.queues;
                 return queues.sort((a, b) => {
                     if (this.orderBy == 'name') {
-                        if (a.QName.value < b.QName.value) return -1;
-                        if (a.QName.value > b.QName.value) return 1;
+                        if (a.name < b.name) return -1;
+                        if (a.name > b.name) return 1;
                         return 0;
                     } else {
-                        if (a.CurrentQDepth) {
-                            if (b.CurrentQDepth) {
-                                if (a.CurrentQDepth.value < b.CurrentQDepth.value) return 1;
-                                if (a.CurrentQDepth.value > b.CurrentQDepth.value) return -1;
+                        if (a.detail && a.detail.CurrentQDepth) {
+                            if (b.detail && b.detail.CurrentQDepth) {
+                                if (a.detail.CurrentQDepth.value < b.detail.CurrentQDepth.value) return 1;
+                                if (a.detail.CurrentQDepth.value > b.detail.CurrentQDepth.value) return -1;
                             }
                             return -1;
                         }

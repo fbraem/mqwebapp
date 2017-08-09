@@ -7,6 +7,14 @@ import client from '@/js/client.js';
 
 import config from 'config';
 
+function initQueue(name) {
+    return {
+        name : name,
+        detail : null,
+        status : null
+    };
+};
+
 const state = {
     queues : [],
     error : null,
@@ -14,15 +22,43 @@ const state = {
 };
 
 const getters = {
+    getQueue : (state) => (name) => {
+        console.log(state);
+        var queue = state.queues.find((q) => {
+            console.log(q.name)
+            return q.name == name;
+        });
+        return queue;
+    }
 };
 
 const mutations = {
-    detail(state, payload) {
+    queues(state, payload) {
         if (payload.json.error) {
-            state.queuemanager.error = payload.json.error;
-            state.queuemanager = null;
+            state.error = payload.json.error;
+            state.queues = [];
         } else {
-            state.queues = payload.json.data;
+            state.queues = [];
+            payload.json.data.forEach((detail) => {
+                var queue = initQueue(detail.QName.value);
+                queue.detail = detail;
+                state.queues.push(queue);
+            })
+        }
+        state.meta = payload.json.meta;
+    },
+    queue(state, payload) {
+        if (payload.json.error) {
+            state.error = payload.json.error;
+        } else {
+            var queue = state.queues.find((q) => {
+                if (q.name == payload.queuename) return q;
+            });
+            if (! queue ) {
+                queue = initQueue(payload.queuename);
+                state.queues.push(queue);
+            }
+            queue.detail = payload.json.data[0];
         }
         state.meta = payload.json.meta;
     }
@@ -36,7 +72,20 @@ const actions = {
                     meta : response.data.meta,
                     error : response.data.error
                 }, { root : true });
-                context.commit('detail', {
+                context.commit('queues', {
+                    json : response.data
+                });
+            });
+    },
+    inquireQueue(context, payload) {
+        client.get(config.mqweb + '/api/queue/inquire/' + payload.queuemanager + '/' + payload.queue)
+            .then((response) => {
+                context.commit('logs', {
+                    meta : response.data.meta,
+                    error : response.data.error
+                }, { root : true });
+                context.commit('queue', {
+                    queuename : payload.queue,
                     json : response.data
                 });
             });
