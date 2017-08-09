@@ -83,7 +83,7 @@
         },
         computed : {
             queuemanagers() {
-                return this.$store.state.queuemanagers.queuemanagers;
+                return this.$store.state.queuemanagerModule.queuemanagers;
             },
             error() {
                 return this.$store.state.error;
@@ -91,7 +91,7 @@
         },
         methods : {
             inErrorState(name) {
-                return this.$store.getters['queuemanagers/inErrorState'](name);
+                return this.$store.getters['queuemanagerModule/inErrorState'](name);
             },
             formatDate(date) {
                 var datetime = moment(date);

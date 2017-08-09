@@ -88,7 +88,7 @@
         },
         computed : {
             queues() {
-                var queues = this.$store.state.queues.queues;
+                var queues = this.$store.state.queueModule.queues;
                 return queues.sort((a, b) => {
                     if (this.orderBy == 'name') {
                         if (a.QName.value < b.QName.value) return -1;
@@ -108,8 +108,8 @@
             }
         },
         mounted() {
-            this.$store.dispatch('queuemanagers/inquireQueuemanager', { queuemanager : this.queuemanagerName });
-            this.$store.dispatch('queues/inquireQueues', { queuemanager : this.queuemanagerName });
+            this.$store.dispatch('queuemanagerModule/inquireQueuemanager', { queuemanager : this.queuemanagerName });
+            this.$store.dispatch('queueModule/inquireQueues', { queuemanager : this.queuemanagerName });
         },
         methods : {
             setOrder(newOrder) {

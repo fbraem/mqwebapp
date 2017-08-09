@@ -38,7 +38,7 @@
         },
         methods : {
             inquireQueuemanagerStatus(queuemanager) {
-                this.$store.dispatch('queuemanagers/inquireQueuemanagerStatus', { queuemanager : queuemanager});
+                this.$store.dispatch('queuemanagerModule/inquireQueuemanagerStatus', { queuemanager : queuemanager});
             }
         }
     };

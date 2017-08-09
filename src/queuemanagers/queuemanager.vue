@@ -208,7 +208,7 @@
         },
         computed : {
             queuemanager() {
-                var queuemanager = this.$store.getters['queuemanagers/getQueuemanager'](this.name);
+                var queuemanager = this.$store.getters['queuemanagerModule/getQueuemanager'](this.name);
                 if (queuemanager) return queuemanager.detail;
                 return null;
             },
@@ -226,7 +226,7 @@
 
         },
         mounted() {
-            this.$store.dispatch('queuemanagers/inquireQueuemanager', { queuemanager : this.name });
+            this.$store.dispatch('queuemanagerModule/inquireQueuemanager', { queuemanager : this.name });
         },
         methods : {
         }

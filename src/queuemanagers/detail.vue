@@ -37,7 +37,7 @@
         },
         methods : {
             inquireQueuemanager(queuemanager) {
-                this.$store.dispatch('queuemanagers/inquireQueuemanager', { queuemanager : queuemanager });
+                this.$store.dispatch('queuemanagerModule/inquireQueuemanager', { queuemanager : queuemanager });
             }
         }
     };

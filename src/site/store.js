@@ -14,7 +14,7 @@ const state = {
 const getters = {
     selectableQueuemanagers(state) {
         var selectable = state.availableQueuemanagers.filter(function(name) {
-            var search = state.queuemanagers.queuemanagers.find(function(queuemanager) {
+            var search = state.queuemanagerModule.queuemanagers.find(function(queuemanager) {
                 return queuemanager.name == name;
             });
             if (search) return false;
@@ -56,7 +56,7 @@ export default new Vuex.Store({
     mutations : mutations,
     actions : actions,
     modules: {
-        queuemanagers : QueueManagerStore,
-        queues : QueueStore
+        queuemanagerModule : QueueManagerStore,
+        queueModule : QueueStore
     }
 });

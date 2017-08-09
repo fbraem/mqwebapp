@@ -49,7 +49,7 @@
         },
         computed : {
             queuemanagers() {
-                return this.$store.state.queuemanagers.queuemanagers;
+                return this.$store.state.queuemanagerModule.queuemanagers;
             },
             selectableQueuemanagers() {
                 return this.$store.getters.selectableQueuemanagers;
@@ -58,7 +58,7 @@
         mounted() {
             this.$store.dispatch('loadAvailable');
             if (this.queuemanagers.length == 0) {
-                this.$store.dispatch('queuemanagers/loadQueuemanagers');
+                this.$store.dispatch('queuemanagerModule/loadQueuemanagers');
             }
         },
         methods : {
