@@ -102,6 +102,10 @@ const actions = {
     inquireQueuemanagerStatus(context, payload) {
         client.get(config.mqweb + '/api/qmstatus/inquire/' + payload.queuemanager)
             .then((response) => {
+                context.commit('logs', {
+                    meta : response.data.meta,
+                    error : response.data.error
+                }, { root : true });
                 context.commit('status', {
                     queuemanager : payload.queuemanager,
                     json : response.data
@@ -111,6 +115,10 @@ const actions = {
     inquireQueuemanager(context, payload) {
         client.get(config.mqweb + '/api/qmgr/inquire/' + payload.queuemanager)
             .then((response) => {
+                context.commit('logs', {
+                    meta : response.data.meta,
+                    error : response.data.error
+                }, { root : true });
                 context.commit('detail', {
                     queuemanager : payload.queuemanager,
                     json : response.data

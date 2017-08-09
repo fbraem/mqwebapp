@@ -32,6 +32,10 @@ const actions = {
     inquireQueues(context, payload) {
         client.get(config.mqweb + '/api/queue/inquire/' + payload.queuemanager)
             .then((response) => {
+                context.commit('logs', {
+                    meta : response.data.meta,
+                    error : response.data.error
+                }, { root : true });
                 context.commit('detail', {
                     json : response.data
                 });

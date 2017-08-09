@@ -32,6 +32,54 @@
             </div>
         </section>
         <router-view></router-view>
+        <section v-if="logs.length > 0" class="uk-section uk-section-small uk-container uk-container-expand uk-section-muted">
+            <ul uk-accordion>
+                <li class="uk-open">
+                    <h3 class="uk-accordion-title">Last 10 MQWeb requests</h3>
+                    <div class="uk-accordion-content">
+                        <table class="uk-table uk-table-small uk-table-justify uk-table-divider uk-text-small">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Queuemanager</th>
+                                    <th>Start</th>
+                                    <th>Taken</th>
+                                    <th>Error</th>
+                                    <th>Error Function</th>
+                                    <th>Error Object</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in logs">
+                                    <td>{{ item.count }}</td>
+                                    <td>{{ item.meta.qmgr }}</td>
+                                    <td>{{ formatDate(item.meta.date.start) }}</td>
+                                    <td>{{ item.meta.elapsed }} s</td>
+                                    <td>
+                                        <div v-if="item.error" style="color: red" class="uk-text-bold uk-text-nowrap">
+                                            <i uk-icon="icon: warning"></i>&nbsp;{{ item.error.reason.code }} - {{ item.error.reason.desc }}
+                                        </div>
+                                        <div v-else style="color: green">
+                                            <i uk-icon="icon: check"></i>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-if="item.error">
+                                            {{ item.error.fn }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-if="item.error">
+                                            {{ item.error.object }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+            </ul>
+        </section>
         <section class="uk-section uk-container uk-container-expand uk-section-secondary">
             <span>&copy; <a href="http://www.mqweb.org">MQWeb</a></span>
         </section>
@@ -53,6 +101,9 @@
             },
             selectableQueuemanagers() {
                 return this.$store.getters.selectableQueuemanagers;
+            },
+            logs() {
+                return this.$store.state.logs;
             }
         },
         mounted() {

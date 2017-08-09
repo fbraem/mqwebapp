@@ -8,7 +8,9 @@ import client from '@/js/client.js';
 import config from 'config';
 
 const state = {
-    availableQueuemanagers : []
+    availableQueuemanagers : [],
+    logs : [],
+    logCount : 0
 };
 
 const getters = {
@@ -31,6 +33,11 @@ const mutations = {
     addQueuemanager(state, queuemanager) {
         var removeIndex = state.availableQueuemanagers.indexOf(queuemanager);
         if (removeIndex >= 0) state.availableQueuemanagers.splice(removeIndex, 1);
+    },
+    logs(state, log) {
+        log.count = ++state.logCount;
+        state.logs.unshift(log);
+        if (state.logs.length > 10) state.logs.pop();
     }
 };
 
