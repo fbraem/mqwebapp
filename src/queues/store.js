@@ -39,7 +39,7 @@ const actions = {
     }
 };
 
-export default new Vuex.Store({
+export default {
     namespaced : true,
     state : state,
     getters : getters,
@@ -47,4 +47,4 @@ export default new Vuex.Store({
     actions : actions,
     modules: {
     }
-});
+};
