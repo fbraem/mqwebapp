@@ -23,9 +23,7 @@ const state = {
 
 const getters = {
     getQueue : (state) => (name) => {
-        console.log(state);
         var queue = state.queues.find((q) => {
-            console.log(q.name)
             return q.name == name;
         });
         return queue;
