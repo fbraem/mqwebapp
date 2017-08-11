@@ -80,6 +80,12 @@
                                         <i v-else uk-icon="icon: check" class="uk-float-right uk-text-success"></i>
                                         {{ queue.InhibitPut.text }}</td>
                                 </tr>
+                                <tr v-if="queue.Usage">
+                                    <th>Usage</th>
+                                    <td>
+                                        {{ queue.Usage.text }}
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
