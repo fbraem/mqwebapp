@@ -85,6 +85,31 @@
                     </div>
                 </div>
             </div>
+            <div>
+                <div v-if="isAlias" class="uk-card uk-card-default uk-card-small">
+                    <div class="uk-card-header">
+                        <h3 class="uk-card-title">Alias Queue</h3>
+                    </div>
+                    <div class="uk-card-body">
+                        <table class="uk-table uk-table-divider uk-table-small uk-table-responsive">
+                            <tbody>
+                                <tr>
+                                    <th>Target Queue</th>
+                                    <td>
+                                        <router-link :to="'/' + queuemanagerName + '/queues/' + queue.BaseObjectName.value">
+                                            {{ queue.BaseObjectName.value }}
+                                        </router-link>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Target Queue Type</th>
+                                    <td>{{ queue.BaseType.text }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </template>
@@ -161,6 +186,14 @@
                 queuemanager : this.queuemanagerName,
                 queue : this.queueName
             });
+        },
+        watch : {
+            '$route'(to, from) {
+                this.$store.dispatch('queueModule/inquireQueue', {
+                    queuemanager : this.queuemanagerName,
+                    queue : this.queueName
+                });
+            }
         },
         methods: {
         }
