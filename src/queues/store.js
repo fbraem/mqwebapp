@@ -33,15 +33,14 @@ const getters = {
 
 const mutations = {
     queues(state, payload) {
+        state.queues = {};
         if (payload.json.error) {
             state.error = payload.json.error;
-            state.queues = {};
         } else {
-            state.queues = {};
             payload.json.data.forEach((detail) => {
                 var queue = initQueue(detail.QName.value);
                 queue.detail = detail;
-                state.queues[detail.QName.value] = queue;
+                Vue.set(state.queues, detail.QName.value, queue);
             })
         }
         state.meta = payload.json.meta;
@@ -53,7 +52,7 @@ const mutations = {
             var queue = state.queues[payload.queuename];
             if (! queue ) {
                 queue = initQueue(payload.queuename);
-                state.queues[payload.queuename] = queue;
+                Vue.set(state.queues, payload.queuename, queue);
             }
             queue.detail = payload.json.data[0];
         }
