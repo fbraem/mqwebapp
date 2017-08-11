@@ -65,8 +65,8 @@
                             {{ formatDate(queue.detail.CreationDate.value + ' ' + queue.detail.CreationTime.value) }}
                         </span>
                         <br />
-                        <span v-if="queue.detail.AlterationDate">
-                            {{ formatDate(queue.detail.AlterationDate.value + ' ' + queue.detail.AlterationTime.value) }}
+                        <span v-if="queue.AlterationDate">
+                            {{ formatDate(queue.AlterationDate.value + ' ' + queue.detail.AlterationTime.value) }}
                         </span>
                     </td>
                 </tr>
@@ -91,22 +91,30 @@
         computed : {
             queues() {
                 var queues = this.$store.state.queueModule.queues;
-                return queues.sort((a, b) => {
-                    if (this.orderBy == 'name') {
-                        if (a.name < b.name) return -1;
-                        if (a.name > b.name) return 1;
-                        return 0;
-                    } else {
-                        if (a.detail && a.detail.CurrentQDepth) {
-                            if (b.detail && b.detail.CurrentQDepth) {
-                                if (a.detail.CurrentQDepth.value < b.detail.CurrentQDepth.value) return 1;
-                                if (a.detail.CurrentQDepth.value > b.detail.CurrentQDepth.value) return -1;
-                            }
-                            return -1;
+                if (this.orderBy == 'name') {
+                    const ordered = [];
+                    Object.keys(queues).sort().forEach((key) => {
+                        ordered.push(queues[key]);
+                    });
+                    return ordered;
+                }
+                // Sort by qdepth
+                const ordered = [];
+                Object.keys(queues).sort((a, b) => {
+                    var q1 = queues[a];
+                    var q2 = queues[b];
+                    if (q1.detail && q1.detail.CurrentQDepth) {
+                        if (q2.detail && q2.detail.CurrentQDepth) {
+                            if (q1.detail.CurrentQDepth.value < q2.detail.CurrentQDepth.value) return 1;
+                            if (q1.detail.CurrentQDepth.value > q2.detail.CurrentQDepth.value) return -1;
                         }
-                        return 1;
+                        return -1;
                     }
+                    return 1;
+                }).forEach((key) => {
+                    ordered.push(queues[key]);
                 });
+                return ordered;
             }
         },
         mounted() {

@@ -16,17 +16,14 @@ function initQueue(name) {
 };
 
 const state = {
-    queues : [],
+    queues : {},
     error : null,
     meta : null
 };
 
 const getters = {
     getQueue : (state) => (name) => {
-        var queue = state.queues.find((q) => {
-            return q.name == name;
-        });
-        return queue;
+        return state.queues[name];
     }
 };
 
@@ -34,13 +31,13 @@ const mutations = {
     queues(state, payload) {
         if (payload.json.error) {
             state.error = payload.json.error;
-            state.queues = [];
+            state.queues = {};
         } else {
-            state.queues = [];
+            state.queues = {};
             payload.json.data.forEach((detail) => {
                 var queue = initQueue(detail.QName.value);
                 queue.detail = detail;
-                state.queues.push(queue);
+                state.queues[detail.QName.value] = queue;
             })
         }
         state.meta = payload.json.meta;
@@ -49,12 +46,10 @@ const mutations = {
         if (payload.json.error) {
             state.error = payload.json.error;
         } else {
-            var queue = state.queues.find((q) => {
-                if (q.name == payload.queuename) return q;
-            });
+            var queue = state.queues[payload.queuename];
             if (! queue ) {
                 queue = initQueue(payload.queuename);
-                state.queues.push(queue);
+                state.queues[payload.queuename] = queue;
             }
             queue.detail = payload.json.data[0];
         }
