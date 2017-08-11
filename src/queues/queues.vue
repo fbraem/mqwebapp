@@ -61,13 +61,15 @@
                         <span v-else>-</span>
                     </td>
                     <td>
-                        <span v-if="queue.detail.CreationDate">
+                        <div v-if="queue.detail.CreationDate">
                             {{ formatDate(queue.detail.CreationDate.value + ' ' + queue.detail.CreationTime.value) }}
-                        </span>
-                        <br />
-                        <span v-if="queue.AlterationDate">
-                            {{ formatDate(queue.AlterationDate.value + ' ' + queue.detail.AlterationTime.value) }}
-                        </span>
+                        </div>
+                        <div v-else>
+                            -
+                        </div>
+                        <div v-if="queue.detail.AlterationDate">
+                            {{ formatDate(queue.detail.AlterationDate.value + ' ' + queue.detail.AlterationTime.value) }}
+                        </div>
                     </td>
                 </tr>
             </tbody>
