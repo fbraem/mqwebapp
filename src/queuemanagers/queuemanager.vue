@@ -219,7 +219,7 @@
                 var datetime = moment(this.queuemanager.CreationDate.value + ' ' + this.queuemanager.CreationTime.value, 'YYYYMMDD HHmmss');
                 return datetime.format('L LTS');
             },
-            alterationDatetime(queuemanager) {
+            alterationDatetime() {
                 var datetime = moment(this.queuemanager.AlterationDate.value + ' ' + this.queuemanager.AlterationTime.value, 'YYYYMMDD HHmmss');
                 return datetime.format('L LTS');
             }
