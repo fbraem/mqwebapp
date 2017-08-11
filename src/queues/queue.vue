@@ -138,6 +138,9 @@
                 }
                 return {};
             },
+            isAlias() {
+                return this.$store.getters['queueModule/isAlias'](this.queueName);
+            },
             creationDatetime() {
                 if (this.queue && this.queue.CreationDate) {
                     var datetime = moment(this.queue.CreationDate.value + ' ' + this.queue.CreationTime.value, 'YYYYMMDD HHmmss');

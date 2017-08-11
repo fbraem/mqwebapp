@@ -24,6 +24,10 @@ const state = {
 const getters = {
     getQueue : (state) => (name) => {
         return state.queues[name];
+    },
+    isAlias : (state) => (name) => {
+        var q = state.queues[name];
+        return q && q.detail && q.detail.QType.text == "Alias";
     }
 };
 
