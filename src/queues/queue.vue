@@ -4,7 +4,7 @@
             Queue - {{ queueName }} - {{ queuemanagerName }}
         </h1>
         <div class="uk-flex-center" uk-grid>
-            <div v-if="used != -1">
+            <div v-if="used != -1" class="">
                 <div class="uk-card uk-card-default uk-card-small">
                     <div class="uk-card-body">
                         <div class="uk-flex uk-flex-middle">
@@ -14,6 +14,21 @@
                             <div class="uk-margin-left">
                                 Capacity<br />
                                 <span class="uk-text-large">{{ used }} % free</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-if="queue && queue.CurrentQDepth">
+                <div class="uk-card uk-card-default uk-card-small">
+                    <div class="uk-card-body">
+                        <div class="uk-flex uk-flex-middle">
+                            <div>
+                                <i uk-icon="icon: hashtag; ratio: 2"></i>
+                            </div>
+                            <div class="uk-margin-left">
+                                Messages<br />
+                                <span class="uk-text-large">{{ queue.CurrentQDepth.value }}</span>
                             </div>
                         </div>
                     </div>
@@ -41,7 +56,7 @@
                             <div>
                                 <i uk-icon="icon: pull; ratio: 2"></i>
                             </div>
-                            <div class="uk-margin-left">
+                            <div class="uk-margin-left ">
                                 Output Count<br />
                                 <span class="uk-text-large">{{ outputCount }} processes</span>
                             </div>
