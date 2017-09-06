@@ -35,12 +35,16 @@
                     </td>
                     <td>{{ queue.detail.QType.text }}</td>
                     <td>
-                        <span v-if="queue.detail.CurrentQDepth">{{ queue.detail.CurrentQDepth.value }}</span>
-                        <span v-else>-</span>
+                        <div class="uk-align-right">
+                            <span v-if="queue.detail.CurrentQDepth">{{ queue.detail.CurrentQDepth.value }}</span>
+                            <span v-else>-</span>
+                        </div>
                     </td>
                     <td>
-                        <span v-if="queue.detail.OpenInputCount">{{ queue.detail.OpenInputCount.value }}</span>
-                        <span v-else>-</span>
+                        <div class="uk-align-right">
+                            <span v-if="queue.detail.OpenInputCount">{{ queue.detail.OpenInputCount.value }}</span>
+                            <span v-else>-</span>
+                        </div>
                     </td>
                     <td>
                         <span v-if="queue.detail.InhibitGet">
@@ -50,8 +54,10 @@
                         <span v-else>-</span>
                     </td>
                     <td>
-                        <span v-if="queue.detail.OpenOutputCount">{{ queue.detail.OpenOutputCount.value }}</span>
-                        <span v-else>-</span>
+                        <div class="uk-align-right">
+                            <span v-if="queue.detail.OpenOutputCount">{{ queue.detail.OpenOutputCount.value }}</span>
+                            <span v-else>-</span>
+                        </div>
                     </td>
                     <td>
                         <span v-if="queue.detail.InhibitPut">
