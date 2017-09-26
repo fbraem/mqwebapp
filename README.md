@@ -31,7 +31,7 @@ When everything is installed you need to build MQWebApp using webpack:
 
 When the build is successful, you have some options to run the app:
 
-1. Use [node](http;//nodejs.org) and the server.js script.
+1. Use [node](http://nodejs.org) and the server.js script.
 2. Copy the html files and the build folder to a webserver.
 3. Let [MQWeb](http://www.mqweb.org) serve the files.
 
