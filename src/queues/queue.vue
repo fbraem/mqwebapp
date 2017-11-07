@@ -106,8 +106,8 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <div v-if="isAlias" class="uk-card uk-card-default uk-card-small">
+            <div v-if="isAlias">
+                <div class="uk-card uk-card-default uk-card-small">
                     <div class="uk-card-header">
                         <h3 class="uk-card-title">Alias Queue</h3>
                     </div>
