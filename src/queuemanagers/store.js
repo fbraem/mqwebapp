@@ -50,10 +50,8 @@ const mutations = {
             state.queuemanagers.push(initQueuemanager(queuemanager));
         });
     },
-    addQueuemanager(state, queuemanager) {
-        state.queuemanagers.push(initQueuemanager(name));
-        var removeIndex = state.availableQueuemanagers.indexOf(queuemanager);
-        if (removeIndex >= 0) state.availableQueuemanagers.splice(removeIndex, 1);
+    addQueuemanager(state, queuemanagerName) {
+        state.queuemanagers.push(initQueuemanager(queuemanagerName));
 
         var localStorageQueuemanagers = state.queuemanagers.map(function(queuemanager) {
           return queuemanager.name;

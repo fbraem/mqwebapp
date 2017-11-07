@@ -115,6 +115,7 @@
         methods : {
             addQueuemanager() {
                 this.$store.dispatch('addQueuemanager', { queuemanager : this.selectedQueuemanager });
+                this.$store.dispatch('queuemanagerModule/addQueuemanager', { queuemanager : this.selectedQueuemanager });
                 this.selectedQueuemanager = "";
             },
             formatDate(date) {

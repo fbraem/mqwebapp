@@ -30,7 +30,7 @@ const mutations = {
     availableQueuemanagers(state, queuemanagers) {
         state.availableQueuemanagers = queuemanagers;
     },
-    addQueuemanager(state, queuemanager) {
+    removeQueuemanagerFromAvailable(state, queuemanager) {
         var removeIndex = state.availableQueuemanagers.indexOf(queuemanager);
         if (removeIndex >= 0) state.availableQueuemanagers.splice(removeIndex, 1);
     },
@@ -50,6 +50,9 @@ const actions = {
         }).catch((err) => {
             console.log(err);
         });
+    },
+    addQueuemanager(context, payload) {
+      context.commit('removeQueuemanagerFromAvailable', payload.queuemanager);
     }
 };
 
