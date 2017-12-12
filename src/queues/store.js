@@ -32,6 +32,11 @@ const getters = {
 };
 
 const mutations = {
+    init(state, payload) {
+      state.queues = {};
+      state.error = null;
+      state.meta = null;
+    },
     queues(state, payload) {
         state.queues = {};
         if (payload.json.error) {
@@ -61,8 +66,14 @@ const mutations = {
 };
 
 const actions = {
+    init(context, payload) {
+      context.commit('init');
+    },
     inquireQueues(context, payload) {
-        client.get(config.mqweb + '/api/queue/inquire/' + payload.queuemanager)
+        if (!payload.filter || payload.filter.length ==0) {
+          payload.filter = '*';
+        }
+        client.get(config.mqweb + '/api/queue/inquire/' + payload.queuemanager + '/' + payload.filter + '?ClusterInfo=true')
             .then((response) => {
                 context.commit('logs', {
                     meta : response.data.meta,
@@ -74,7 +85,7 @@ const actions = {
             });
     },
     inquireQueue(context, payload) {
-        client.get(config.mqweb + '/api/queue/inquire/' + payload.queuemanager + '/' + payload.queue)
+        client.get(config.mqweb + '/api/queue/inquire/' + payload.queuemanager + '/' + payload.queue + '?ClusterInfo=true')
             .then((response) => {
                 context.commit('logs', {
                     meta : response.data.meta,

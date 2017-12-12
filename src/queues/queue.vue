@@ -93,13 +93,57 @@
                                     <td>
                                         <i v-if="queue.InhibitPut.value == 1" uk-icon="icon: warning" class="uk-float-right uk-text-danger"></i>
                                         <i v-else uk-icon="icon: check" class="uk-float-right uk-text-success"></i>
-                                        {{ queue.InhibitPut.text }}</td>
+                                        {{ queue.InhibitPut.text }}
+                                    </td>
                                 </tr>
                                 <tr v-if="queue.Usage">
                                     <th>Usage</th>
                                     <td>
                                         {{ queue.Usage.text }}
                                     </td>
+                                </tr>
+                                <tr v-if="queue.BackoutRequeueName">
+                                    <th>Backout Requeue Name</th>
+                                    <td>
+                                      <span v-if="queue.BackoutRequeueName.value.length > 0">{{ queue.BackoutRequeueName.value }}</span>
+                                      <span v-else="">-</span>
+                                    </td>
+                                </tr>
+                                <tr v-if="queue.BackoutThreshold">
+                                    <th>Backout Threshold</th>
+                                    <td>
+                                      {{ queue.BackoutThreshold.value }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="uk-card uk-card-default uk-card-small">
+                    <div class="uk-card-header">
+                        <h3 class="uk-card-title">Statistical Information</h3>
+                    </div>
+                    <div class="uk-card-body">
+                        <table class="uk-table uk-table-divider uk-table-small uk-table-responsive">
+                            <tbody>
+                                <tr>
+                                    <th>Current / Maximum Queuedepth</th>
+                                    <td v-if="queue.CurrentQDepth">
+                                      <router-link :to="'/' + queuemanagerName + '/messages/' + queueName">
+                                          {{ queue.CurrentQDepth.value }}
+                                      </router-link>
+                                      / {{ queue.MaxQDepth.value }}
+                                    </td>
+                                </tr>
+                                <tr v-if="inputCount != -1">
+                                  <th>Open Input Count</th>
+                                  <td>{{ inputCount }}</td>
+                                </tr>
+                                <tr v-if="outputCount != -1">
+                                  <th>Open Output Count</th>
+                                  <td>{{ outputCount }}</td>
                                 </tr>
                             </tbody>
                         </table>
