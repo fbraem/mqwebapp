@@ -12,19 +12,20 @@
             </div>
         </form>
         <div v-if="queues && queues.length > 0">
-            <button class="uk-button uk-button-default" type="button">Order</button>
-            <div ref="dropdownOrder" uk-dropdown="delay-hide:0">
-                <ul class="uk-nav uk-dropdown-nav">
-                    <li><a @click="setOrder('name')">Order by name</a></li>
-                    <li><a @click="setOrder('qdepth')">Order by queuedepth</a></li>
-                </ul>
-            </div>
             <table class="uk-table uk-table-divider uk-table-striped uk-table-small">
                 <thead>
                     <tr>
-                        <th class="uk-width-small">Queue</th>
+                        <th class="uk-width-small">
+                          Queue <i @click="switchNameOrder()" v-if="orderBy == 'name'":uk-icon="nameOrder == 0 ? 'icon: chevron-up' : 'icon: chevron-down'" class="uk-float-right"></i>
+                          <i v-else @click="setOrder('name')" uk-icon="icon: chevron-right" class="uk-float-right"></i>
+                        </th>
                         <th class="uk-width-small">Type</th>
-                        <th class="uk-width-small">Current<br />QDepth</th>
+                        <th class="uk-width-small">
+                          Current
+                          <i @click="switchQDepthOrder()" v-if="orderBy == 'qdepth'":uk-icon="qdepthOrder == 0 ? 'icon: chevron-up' : 'icon: chevron-down'" class="uk-float-right"></i>
+                          <i v-else @click="setOrder('qdepth')" uk-icon="icon: chevron-right" class="uk-float-right"></i>
+                          <br />QDepth
+                        </th>
                         <th class="uk-width-small">Input<br /> Count</th>
                         <th class="uk-width-small">Input<br />Enabled</th>
                         <th class="uk-width-small">Output<br />Count</th>
@@ -108,8 +109,10 @@
         ],
         data() {
             return {
-                'filter' : '*',
-                'orderBy' : 'name'
+                filter : '*',
+                orderBy : 'name',
+                nameOrder : 0, // 0 = ASC, 1 = DESC
+                qdepthOrder : 1 // 0 = ASC, 1 = DESC
             };
         },
         computed : {
@@ -117,7 +120,11 @@
                 var queues = this.$store.state.queueModule.queues;
                 if (this.orderBy == 'name') {
                     const ordered = [];
-                    Object.keys(queues).sort().forEach((key) => {
+                    Object.keys(queues).sort((a, b) => {
+                      if (a < b) return this.nameOrder == 0 ? -1 : 1;
+                      if (a > b) return this.nameOrder == 0 ? 1 : -1;
+                      return 0;
+                    }).forEach((key) => {
                         ordered.push(queues[key]);
                     });
                     return ordered;
@@ -127,14 +134,16 @@
                 Object.keys(queues).sort((a, b) => {
                     var q1 = queues[a];
                     var q2 = queues[b];
-                    if (q1.detail && q1.detail.CurrentQDepth) {
-                        if (q2.detail && q2.detail.CurrentQDepth) {
-                            if (q1.detail.CurrentQDepth.value < q2.detail.CurrentQDepth.value) return 1;
-                            if (q1.detail.CurrentQDepth.value > q2.detail.CurrentQDepth.value) return -1;
-                        }
-                        return -1;
-                    }
-                    return 1;
+
+                    var num1 = q1.detail && q1.detail.CurrentQDepth ? q1.detail.CurrentQDepth.value : -1;
+                    var num2 = q2.detail && q2.detail.CurrentQDepth ? q2.detail.CurrentQDepth.value : -1;
+
+                    if (num1 < num2) return this.qdepthOrder == 0 ? -1 : 1;
+                    if (num1 > num2) return this.qdepthOrder == 0 ? 1 : -1;
+
+                    if (a < b) return this.nameOrder == 0 ? -1 : 1;
+                    if (a > b) return this.nameOrder == 0 ? 1 : -1;
+                    return 0;
                 }).forEach((key) => {
                     ordered.push(queues[key]);
                 });
@@ -147,8 +156,13 @@
         },
         methods : {
             setOrder(newOrder) {
-                UIkit.dropdown(this.$refs.dropdownOrder).hide();
                 this.orderBy = newOrder;
+            },
+            switchNameOrder() {
+                this.nameOrder = !this.nameOrder;
+            },
+            switchQDepthOrder() {
+                this.qdepthOrder = !this.qdepthOrder;
             },
             formatDate(date) {
                 var datetime = moment(date, 'YYYYMMDD HHmmss');
