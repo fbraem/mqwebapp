@@ -71,6 +71,7 @@ const mutations = {
                 queuemanager.error = payload.json.error;
                 queuemanager.status = null;
             } else {
+                queuemanager.error = null;
                 queuemanager.status = payload.json.data[0];
             }
             queuemanager.meta = payload.json.meta;
@@ -89,6 +90,7 @@ const mutations = {
                 queuemanager.error = payload.json.error;
                 queuemanager.detail = null;
             } else {
+                queuemanager.error = null;
                 queuemanager.detail = payload.json.data[0];
             }
             queuemanager.meta = payload.json.meta;
