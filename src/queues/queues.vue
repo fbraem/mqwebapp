@@ -46,7 +46,14 @@
                         <td>{{ queue.detail.QType.text }}</td>
                         <td>
                             <div class="uk-align-right">
-                                <span v-if="queue.detail.CurrentQDepth">{{ queue.detail.CurrentQDepth.value }}</span>
+                                <span v-if="queue.detail.CurrentQDepth">
+                                  <router-link v-if="queue.detail.CurrentQDepth.value > 0" :to="'/' + queuemanagerName + '/messages/' + queue.detail.QName.value">
+                                    {{ queue.detail.CurrentQDepth.value }}
+                                  </router-link>
+                                  <span v-else>
+                                    {{ queue.detail.CurrentQDepth.value }}
+                                  </span>
+                                </span>
                                 <span v-else>-</span>
                             </div>
                         </td>
@@ -149,10 +156,6 @@
                 });
                 return ordered;
             }
-        },
-        created() {
-            this.$store.dispatch('queueModule/init');
-            this.$store.dispatch('queuemanagerModule/inquireQueuemanager', { queuemanager : this.queuemanagerName });
         },
         methods : {
             setOrder(newOrder) {

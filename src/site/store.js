@@ -57,7 +57,8 @@ const actions = {
 };
 
 import QueueManagerStore from '@/queuemanagers/store.js';
-import QueueStore from '@/queues/store.js'
+import QueueStore from '@/queues/store.js';
+import MessageStore from '@/messages/store.js';
 
 export default new Vuex.Store({
     namespaced : true,
@@ -67,6 +68,7 @@ export default new Vuex.Store({
     actions : actions,
     modules: {
         queuemanagerModule : QueueManagerStore,
-        queueModule : QueueStore
+        queueModule : QueueStore,
+        messageModule : MessageStore
     }
 });

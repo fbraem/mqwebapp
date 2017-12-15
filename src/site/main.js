@@ -20,6 +20,7 @@ import QueuemanagersApp from '@/queuemanagers/queuemanagers.vue';
 import QueuemanagerApp from '@/queuemanagers/queuemanager.vue';
 import QueuesApp from '@/queues/queues.vue';
 import QueueApp from '@/queues/queue.vue';
+import MessagesApp from '@/messages/messages.vue';
 
 const router = new VueRouter({
     routes : [
@@ -45,6 +46,11 @@ const router = new VueRouter({
                     path : '/:queuemanagerName/queues/:queueName',
                     component : QueueApp,
                     props : true
+                },
+                {
+                  path : '/:queuemanagerName/messages/:queueName',
+                  component : MessagesApp,
+                  props : true
                 }
             ]
         }
