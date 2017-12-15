@@ -70,6 +70,9 @@ const actions = {
       context.commit('init');
     },
     inquireQueues(context, payload) {
+        if ( context.rootGetters['queuemanagerModule/inErrorState'](payload.queuemanager) == -1 ) { // Not Connected yet;
+            context.dispatch('queuemanagerModule/inquireQueuemanager', { queuemanager : payload.queuemanager }, { root : true });
+        }
         if (!payload.filter || payload.filter.length ==0) {
           payload.filter = '*';
         }
