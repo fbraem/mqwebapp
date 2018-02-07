@@ -24,7 +24,7 @@
               This can occur when all of these messages are expired or if another active application has
               processed these messages.
             </div>
-            <div v-if="browsed && messageCount > 0">
+            <div v-if="messageCount > 0">
                 {{ messageCount }} / {{ queueDepth }}
                 <table class="uk-table uk-table-divider uk-table-striped uk-table-small">
                     <thead>
@@ -57,29 +57,29 @@
                     <tbody>
                         <tr v-for="message in messages">
                             <td>
-                              {{ message.PutDatetime }}
+                              {{ message.mqmd.PutDatetime }}
                             </td>
                             <td>
-                              {{ message.MsgId }}<br />
-                              {{ message.CorrelId }}
+                              {{ message.mqmd.MsgId }}<br />
+                              {{ message.mqmd.CorrelId }}
                             </td>
                             <td>
-                              {{ message.Format }}<br />
-                              {{ message.MsgType }}
+                              {{ message.mqmd.Format }}<br />
+                              {{ message.mqmd.MsgType }}
                             </td>
                             <td>
-                              {{ message.CodedCharSetId }}<br />
-                              {{ message.Encoding }}
+                              {{ message.mqmd.CodedCharSetId }}<br />
+                              {{ message.mqmd.Encoding }}
                             </td>
                             <td>
-                              {{ message.Length }}
+                              {{ message.mqmd.Length }}
                             </td>
                             <td>
-                              {{ message.PutApplName }}<br />
-                              {{ message.PutApplType }}
+                              {{ message.mqmd.PutApplName }}<br />
+                              {{ message.mqmd.PutApplType }}
                             </td>
                             <td>
-                              {{ message.User }}
+                              {{ message.mqmd.User }}
                             </td>
                         </tr>
                     </tbody>
@@ -91,6 +91,9 @@
 </template>
 
 <script>
+	var Worker = require("worker-loader!./worker");
+	import config from 'config';
+
   export default {
     props : [
         'queuemanagerName',
@@ -99,7 +102,9 @@
     data() {
         return {
             browsed : false,
-            limit : 100
+            limit : 100,
+						ws : null,
+						worker : new Worker()
         };
     },
     computed : {
@@ -121,7 +126,7 @@
           return this.$store.getters['messageModule/messages'];
         },
         messageCount() {
-          return Object.keys(this.messages).length;
+          return this.messages.length;
         },
         error() {
           return this.$store.getters['messageModule/error'];
@@ -144,13 +149,31 @@
     },
     methods : {
         browseMessages() {
+					var count = 0;
+					this.worker.addEventListener("message", (event) => {
+						count++;
+						this.$store.dispatch('messageModule/handleMessage', JSON.parse(event.data));
+					});
+					this.worker.postMessage(["start", config.ws + '/' + this.queuemanagerName + '/' + this.queueName, this.limit]);
+/*
+					this.ws = new WebSocket(config.ws + '/' + this.queuemanagerName + '/' + this.queueName);
+					this.ws.onmessage = (event) => {
+						setTimeout(() => {
+
+						}, 100);
+					}
+*/
+				}
+/*
             this.$store.dispatch('messageModule/browseMessages', {
               queuemanager : this.queuemanagerName,
-              queue : this.queueName
+              queue : this.queueName,
+              limit : this.limit
             }).then(() => {
               this.browsed = true;
             });
         }
+*/
     }
   }
 </script>

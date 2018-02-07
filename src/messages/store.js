@@ -9,7 +9,7 @@ import config from 'config';
 
 const state = {
     queue : null,
-    messages : {},
+    messages : [],
     error : null,
     meta : null
 };
@@ -32,16 +32,15 @@ const mutations = {
       state.error = null;
       state.meta = null;
     },
-    messages(state, payload) {
-        state.messages = {};
-        if (payload.json.error) {
+    message(state, payload) {
+        //state.messages = [];
+        if (payload.error) {
             state.error = payload.json.error;
         } else {
-            payload.json.data.forEach((message) => {
-                Vue.set(state.messages, message.MsgId, message);
-            })
+						state.messages.push(payload);
         }
-        state.meta = payload.json.meta;
+				//TODO: // Add meta to browse
+        //state.meta = payload.json.meta;
     }
 };
 
@@ -51,7 +50,7 @@ const actions = {
     },
     browseMessages(context, payload) {
         context.commit('init');
-        client.get(config.mqweb + '/api/message/browse/' + payload.queuemanager + '/' + payload.queue + '?Limit=100')
+        client.get(config.mqweb + '/api/message/browse/' + payload.queuemanager + '/' + payload.queue + '?Limit=' + payload.limit)
             .then((response) => {
                 context.commit('logs', {
                     meta : response.data.meta,
@@ -61,7 +60,10 @@ const actions = {
                     json : response.data
                 });
             });
-    }
+    },
+		handleMessage(context, payload) {
+			context.commit('message', payload);
+		}
 };
 
 export default {
