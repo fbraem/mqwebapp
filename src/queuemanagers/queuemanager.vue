@@ -17,7 +17,7 @@
                             <div class="uk-text-meta">This queuemanager was created on {{ creationDatetime }} and last modified on {{ alterationDatetime }}</div>
                         </div>
                         <div class="uk-card-body">
-                            <table class="uk-table uk-table-divider uk-table-small uk-table-responsive">
+                            <table class="uk-table uk-table-divider uk-table-small uk-table-responsive uk-table-justify">
                                 <tbody>
                                     <tr>
                                         <th>Queuemanager Identifier</th>
