@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const CleanupWebpackPlugin = require('webpack-cleanup-plugin');
 
 function resolve(dir) {
     return path.join(__dirname, dir);
@@ -12,7 +13,9 @@ var config = {
         "site" : "./src/site/main.js"
     },
     output : {
-        filename : "./build/[name].js"
+				path : path.join(__dirname, "build"),
+				publicPath : '/build/',
+        filename : "[name].js"
     },
     module : {
         loaders : [
@@ -29,7 +32,8 @@ var config = {
             { test: /\.(png|jpe?g|gif|svg)$/i, loaders: [
                 "file-loader?name=build/assets/[name]_[hash].[ext]&publicPath=ui/",
                 'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
-            ] }
+            	]
+						}
         ]
     },
     resolve : {
@@ -41,7 +45,8 @@ var config = {
     },
     plugins : [
         // Workaround to exclude moment.js locales
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+				new CleanupWebpackPlugin()
     ]
 };
 
