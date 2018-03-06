@@ -12,8 +12,8 @@ self.onmessage = (e) => {
 		self.ws.onmessage = (event) => {
 			messageCount++;
 			if (maxMessageCount != -1 && messageCount == maxMessageCount) {
-				//self.ws.close();
 				self.ws = null;
+				self.close(); // Close the web worker
 			}
 			self.postMessage(event.data);
 		};

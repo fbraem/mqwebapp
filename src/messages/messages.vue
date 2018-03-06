@@ -24,8 +24,8 @@
               This can occur when all of these messages are expired or if another active application has
               processed these messages.
             </div>
-            <div v-if="messageCount > 0">
-                {{ messageCount }} / {{ queueDepth }}
+            <div v-if="count > 0">
+                {{ count }} / {{ queueDepth }}
                 <table class="uk-table uk-table-divider uk-table-striped uk-table-small">
                     <thead>
                         <tr>
@@ -64,7 +64,13 @@
                               {{ message.mqmd.CorrelId }}
                             </td>
                             <td>
-                              {{ message.mqmd.Format }}<br />
+															<span v-if="message.mqmd.Format == 'MQEVENT'">
+																<a @click="showEventMessage(message.mqmd.MsgId)">{{ message.mqmd.Format }}</a>
+															</span>
+															<span v-else>
+                              	{{ message.mqmd.Format }}
+															</span>
+															<br />
                               {{ message.mqmd.MsgType }}
                             </td>
                             <td>
@@ -84,13 +90,89 @@
                         </tr>
                     </tbody>
                 </table>
-                {{ messageCount }} / {{ queueDepth }}
+                {{ count }} / {{ queueDepth }}
             </div>
         </section>
+				<div ref="eventDialog" uk-modal>
+					<div v-if="eventMessage" class="uk-modal-dialog uk-modal-body">
+						<button class="uk-modal-close-default" type="button" uk-close></button>
+						<div class="uk-modal-header">
+							<h2 class="uk-modal-title">Event</h2>
+						</div>
+						<table class="uk-table uk-table-divider uk-table-small uk-table-responsive uk-table-middle">
+								<tbody>
+										<tr>
+												<th style="vertical-align:middle;">Event Reason</th>
+												<td>{{ eventMessage.event.Reason.desc }}</td>
+										</tr>
+										<tr>
+												<th style="vertical-align:middle;">Event Queuemanager</th>
+												<td>{{ eventMessage.event.EventQMgr.value }}</td>
+										</tr>
+										<tr>
+												<th style="vertical-align:middle;">Event Origin</th>
+												<td>{{ eventMessage.event.EventOrigin.text }}</td>
+										</tr>
+										<tr>
+												<th style="vertical-align:middle;">Event User</th>
+												<td>{{ eventMessage.event.EventUserId.value }}</td>
+										</tr>
+										<tr>
+												<th style="vertical-align:middle;">Object Type</th>
+												<td>{{ eventMessage.event.ObjectType.text }}</td>
+										</tr>
+										<template v-if="eventMessage.event.ObjectType.text == 'Authority Record'">
+											<tr>
+													<th style="vertical-align:middle;">Authorization List</th>
+													<td>
+														<div>
+															<span v-for="(value, index) in eventMessage.event.AuthorizationList.value">
+																{{ value.text }}<span v-if="index < eventMessage.event.AuthorizationList.value.length - 1">, </span>
+															</span>
+															<span v-if="eventMessage.event.MsgSeqNumber == 1" class="uk-label uk-align-right">
+																original
+															</span>
+															<span class="uk-label uk-align-right" v-else>
+																new
+															</span>
+														</div>
+														<hr v-if="relatedMessage" uk-divider />
+														<div v-if="relatedMessage">
+															<span v-for="(value, index) in relatedMessage.event.AuthorizationList.value">
+																{{ value.text }}<span v-if="index < relatedMessage.event.AuthorizationList.value.length - 1">, </span>
+															</span>
+															<span v-if="relatedMessage.event.MsgSeqNumber == 1" class="uk-label uk-align-right">
+																original
+															</span>
+															<span class="uk-label uk-align-right" v-else>
+																new
+															</span>
+														</div>
+													</td>
+											</tr>
+											<tr>
+												<th style="vertical-align:middle;">Entity Type</th>
+												<td>{{ eventMessage.event.EntityType.text }}</td>
+											</tr>
+											<tr>
+												<th style="vertical-align:middle;">Entity Name</th>
+												<td>{{ eventMessage.event.EntityName.value }}</td>
+											</tr>
+											<tr>
+												<th style="vertical-align:middle;">Profilename</th>
+												<td>{{ eventMessage.event.ProfileName.value }}</td>
+											</tr>
+										</template>
+								</tbody>
+						</table>
+					</div>
+				</div>
     </div>
 </template>
 
 <script>
+	import UIkit from 'uikit';
+
 	var Worker = require("worker-loader!./worker");
 	import config from 'config';
 
@@ -104,7 +186,9 @@
             browsed : false,
             limit : 100,
 						ws : null,
-						worker : new Worker()
+						worker : new Worker(),
+						eventMessage : null,
+						relatedMessage : null
         };
     },
     computed : {
@@ -119,14 +203,14 @@
             }
             return 0;
         },
+				count() {
+					return this.$store.getters['messageModule/count'];
+				},
         warnAboutQDepth() {
           return this.queueDepth > 100;
         },
         messages() {
           return this.$store.getters['messageModule/messages'];
-        },
-        messageCount() {
-          return this.messages.length;
         },
         error() {
           return this.$store.getters['messageModule/error'];
@@ -149,31 +233,25 @@
     },
     methods : {
         browseMessages() {
-					var count = 0;
-					this.worker.addEventListener("message", (event) => {
-						count++;
-						this.$store.dispatch('messageModule/handleMessage', JSON.parse(event.data));
-					});
-					this.worker.postMessage(["start", config.ws + '/' + this.queuemanagerName + '/' + this.queueName, this.limit]);
-/*
-					this.ws = new WebSocket(config.ws + '/' + this.queuemanagerName + '/' + this.queueName);
-					this.ws.onmessage = (event) => {
-						setTimeout(() => {
-
-						}, 100);
+					this.$store.dispatch('messageModule/browseMessages', { queuemanagerName : this.queuemanagerName, queueName : this.queueName, limit : this.limit });
+				},
+				showEventMessage(msgId) {
+					this.eventMessage = this.$store.getters['messageModule/getMessage'](msgId);
+					this.relatedMessage = this.getRelatedEventMessage(this.eventMessage);
+					UIkit.modal(this.$refs.eventDialog).show();
+				},
+				getRelatedEventMessage(message) {
+					var relatedMessages = this.$store.getters['messageModule/getMessageWithCorrelationId'](message.mqmd.CorrelId);
+					var searchMsgSeqNumber = message.event.MsgSeqNumber == 1 ? 2 : 1;
+					if (relatedMessages.length == 2) {
+						for(var m in relatedMessages) {
+							if ( relatedMessages[m].event.MsgSeqNumber == searchMsgSeqNumber ) {
+								return relatedMessages[m];
+							}
+						}
 					}
-*/
+					return null;
 				}
-/*
-            this.$store.dispatch('messageModule/browseMessages', {
-              queuemanager : this.queuemanagerName,
-              queue : this.queueName,
-              limit : this.limit
-            }).then(() => {
-              this.browsed = true;
-            });
-        }
-*/
     }
   }
 </script>
